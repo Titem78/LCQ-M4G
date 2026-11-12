@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="Optimiseur de side events — Disney Lorcana European Championship 2026, Disneyland Paris.">
-<title>Lorcana Europe 2026 — Event Optimizer</title>
+<meta name="description" content="Optimiseur de side events — Disney Lorcana Challenge London, ExCeL London, 13–15 novembre 2026.">
+<title>Lorcana Challenge London — Event Optimizer</title>
 
 <style>
 :root{
@@ -278,8 +278,8 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
 
 <header>
 <div class="header-inner">
-  <h1>Disney Lorcana European Championship 2026</h1>
-  <div class="subtitle">Disneyland Paris · 11–13 septembre 2026</div>
+  <h1>Disney Lorcana Challenge — London</h1>
+  <div class="subtitle">ExCeL London (Halls S13–S22) · 13–15 novembre 2026 · Season of Villainy · prix en £</div>
   <div class="tabs" role="tablist" aria-label="Sections">
     <button class="tab-btn" role="tab" id="tab-optimizer" aria-controls="optimizer" aria-selected="true">⚡ Optimiseur</button>
     <button class="tab-btn" role="tab" id="tab-prizewall" aria-controls="prizewall" aria-selected="false" tabindex="-1">🎁 Prize Wall</button>
@@ -298,23 +298,23 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
   <h2>Optimiseur principal <span class="hint">recalcul automatique à chaque changement</span></h2>
 
   <div class="grid">
-    <div><label for="optBudget">Budget Side Events (€)</label>
-      <input id="optBudget" type="number" value="500" min="0" step="5" inputmode="numeric"></div>
+    <div><label for="optBudget">Budget Side Events (£)</label>
+      <input id="optBudget" type="number" value="400" min="0" step="5" inputmode="numeric"></div>
 
     <div><label for="optWinrate">Winrate estimé (%)</label>
       <input id="optWinrate" type="number" value="60" min="0" max="100" step="1" inputmode="numeric"></div>
 
-    <div><label for="optNewPack">Booster Attack of the Vine (€)</label>
-      <input id="optNewPack" type="number" value="5" min="0" step="0.1" inputmode="decimal"></div>
+    <div><label for="optNewPack">Booster Hyperia City (£)</label>
+      <input id="optNewPack" type="number" value="4.5" min="0" step="0.1" inputmode="decimal"></div>
 
-    <div><label for="optOldPack">Ancien booster Chaos (€)</label>
-      <input id="optOldPack" type="number" value="6" min="0" step="0.1" inputmode="decimal"></div>
+    <div><label for="optOldPack">Booster set précédent / Chaos (£)</label>
+      <input id="optOldPack" type="number" value="4" min="0" step="0.1" inputmode="decimal"></div>
 
-    <div><label for="optTicketValue">Valeur de 10 tickets (€)</label>
-      <input id="optTicketValue" type="number" value="1.25" min="0" step="0.05" inputmode="decimal"></div>
+    <div><label for="optTicketValue">Valeur de 1 000 tickets (£)</label>
+      <input id="optTicketValue" type="number" value="6.5" min="0" step="0.1" inputmode="decimal"></div>
 
     <div><label for="optBadge">Tickets déjà acquis (badge)</label>
-      <input id="optBadge" type="number" value="160" min="0" step="10" inputmode="numeric"></div>
+      <input id="optBadge" type="number" value="2400" min="0" step="100" inputmode="numeric"></div>
 
     <div><label for="optObjective">Objectif</label>
       <select id="optObjective">
@@ -323,37 +323,44 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
         <option value="net">Maximum valeur nette</option>
       </select></div>
 
-    <div><label for="optTeam">Team Trios possible</label>
+    <div><label for="optTeam">Events en équipe possibles (Trios / 2v2)</label>
       <select id="optTeam"><option value="yes">Oui</option><option value="no">Non</option></select></div>
 
     <div><label for="optBuffer">Marge entre deux events (minutes)</label>
       <input id="optBuffer" type="number" value="10" min="0" step="5" inputmode="numeric"></div>
   </div>
 
-  <h3 class="section-title">Situation Main Event</h3>
+  <h3 class="section-title">Situation Main Event / CCQ</h3>
 
   <div class="grid">
-    <div><label for="optFriday">Vendredi</label>
+    <div><label for="optFriday">Vendredi 13/11</label>
       <select id="optFriday">
-        <option value="lcq">LCQ le matin</option>
-        <option value="free">Libre</option>
+        <option value="me1">Main Event 1 (09:00, 8 rondes suisses)</option>
+        <option value="free">Libre pour les sides</option>
       </select></div>
 
-    <div><label for="optLcqEnd">Disponible vendredi à partir de</label>
-      <input id="optLcqEnd" type="time" value="13:00"></div>
+    <div><label for="optFriFrom">Dispo vendredi à partir de (drop / élimination)</label>
+      <input id="optFriFrom" type="time" value="21:00"></div>
 
-    <div><label for="optSaturday">Samedi</label>
+    <div><label for="optSaturday">Samedi 14/11</label>
       <select id="optSaturday">
         <option value="free">Libre pour les sides</option>
-        <option value="main">Main Event — journée bloquée</option>
+        <option value="ccq">CCQ Infinity (09:00) — dispo après élimination</option>
+        <option value="me2">Main Event 2 (09:00) — journée bloquée</option>
+        <option value="me1d2">Day 2 du Main Event 1 — journée bloquée</option>
       </select></div>
 
-    <div><label for="optSunday">Dimanche</label>
+    <div><label for="optSatFrom">Dispo samedi à partir de (si CCQ)</label>
+      <input id="optSatFrom" type="time" value="14:00"></div>
+
+    <div><label for="optSunday">Dimanche 15/11</label>
       <select id="optSunday">
         <option value="free">Libre pour les sides</option>
-        <option value="top16">Top 16 Main Event — journée bloquée</option>
+        <option value="main">Main Event 2 jour 2 / Top 8 — journée bloquée</option>
       </select></div>
   </div>
+
+  <p class="note small" id="optSituationNote" style="margin-top:12px"></p>
 
   <div class="btn-row">
     <button class="primary" id="btnOptimize" type="button">CALCULER LE MEILLEUR PARCOURS</button>
@@ -369,17 +376,17 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
       </p>
 
       <div class="grid">
-        <div><label for="ecoFarmCost">Réf. Pack Rush On-Demand — coût total (€)</label>
-          <input id="ecoFarmCost" type="number" value="30" min="0" step="0.5" inputmode="decimal"></div>
-        <div><label for="ecoFarmTickets">Réf. Pack Rush On-Demand — tickets obtenus</label>
-          <input id="ecoFarmTickets" type="number" value="40" min="1" step="1" inputmode="numeric"></div>
-        <div><label for="ecoPrizeTickets">Réf. Prize Wall — coût d'un booster (tickets)</label>
-          <input id="ecoPrizeTickets" type="number" value="40" min="1" step="1" inputmode="numeric"></div>
+        <div><label for="ecoFarmCost">Réf. Pack Rush On-Demand — coût net d'un run (£18 − boosters)</label>
+          <input id="ecoFarmCost" type="number" value="9" min="0" step="0.5" inputmode="decimal"></div>
+        <div><label for="ecoFarmTickets">Réf. Pack Rush On-Demand — tickets moyens (2000 V / 1000 D)</label>
+          <input id="ecoFarmTickets" type="number" value="1500" min="1" step="50" inputmode="numeric"></div>
+        <div><label for="ecoPrizeTickets">Réf. Prize Wall — coût d'un booster (tickets, estimé)</label>
+          <input id="ecoPrizeTickets" type="number" value="600" min="1" step="50" inputmode="numeric"></div>
       </div>
 
       <div class="kv" style="margin-top:12px">
         <div class="kv-item">
-          <div class="k">Coût d'acquisition (Pack Rush 2 joueurs)</div>
+          <div class="k">Coût d'acquisition (Pack Rush On-Demand)</div>
           <div class="v gold" id="ecoFarmOut">—</div>
         </div>
         <div class="kv-item">
@@ -422,7 +429,7 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
       <thead><tr>
         <th>Format</th><th>Prix</th><th>Boosters</th>
         <th>Tickets selon les victoires</th>
-        <th>Tickets moyens</th><th>Tickets / €</th>
+        <th>Tickets moyens</th><th>Tickets / £</th>
         <th>Valeur boosters</th><th>Valeur nette</th>
       </tr></thead>
       <tbody id="optFormatTable"></tbody>
@@ -442,9 +449,9 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
 
   <div class="grid">
     <div><label for="pwOwned">Tickets déjà possédés</label>
-      <input id="pwOwned" type="number" value="160" min="0" step="10" inputmode="numeric"></div>
+      <input id="pwOwned" type="number" value="2400" min="0" step="100" inputmode="numeric"></div>
     <div><label for="pwExpected">Tickets prévisionnels des sides</label>
-      <input id="pwExpected" type="number" value="0" min="0" step="10" inputmode="numeric"></div>
+      <input id="pwExpected" type="number" value="0" min="0" step="100" inputmode="numeric"></div>
     <div><label for="pwAvailable">Total disponible</label>
       <input id="pwAvailable" type="text" readonly></div>
     <div><label for="pwTarget">Coût total de ma sélection</label>
@@ -461,9 +468,9 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
   </div>
 
   <p class="note small" style="margin-top:14px">
-    Les lots sont ceux que nous avons identifiés pour le Prize Wall 2026.
-    Les coûts Paris ne sont pas encore officiels : les chiffres saisis sont modifiables
-    et doivent être considérés comme des estimations de travail.
+    Le Prize Wall de Londres n'est pas encore publié par Fanfinity (« Coming soon »).
+    Les lots et coûts ci-dessous reprennent la liste Paris convertie à l'échelle Londres (≈ ×15 :
+    badge 160 → 2400 tickets). Tout est modifiable : à corriger sur place.
   </p>
 
   <div class="table-wrap">
@@ -500,23 +507,25 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
         <option value="constructed">Constructed</option>
         <option value="sealed">Sealed / Pack Rush</option>
         <option value="sprint">Ink Sprint</option>
+        <option value="premium">Villain Challenge / Pin Pursuit</option>
+        <option value="team">Équipe</option>
       </select></div>
     <div><label for="planningDay">Jour</label>
       <select id="planningDay">
         <option value="all">Tous les jours</option>
-        <option value="Vendredi">Vendredi 11/09</option>
-        <option value="Samedi">Samedi 12/09</option>
-        <option value="Dimanche">Dimanche 13/09</option>
+        <option value="Vendredi">Vendredi 13/11</option>
+        <option value="Samedi">Samedi 14/11</option>
+        <option value="Dimanche">Dimanche 15/11</option>
       </select></div>
   </div>
 
   <p class="small" style="margin-top:12px">
-    Les heures de début viennent de Fanfinity. Les heures de fin sont des estimations
-    de durée utilisées par l'optimiseur, pas des horaires officiels.
+    Heures de début, prix et barèmes de tickets : pages événements my.fanfinity.gg (relevé du 12/11).
+    Les heures de fin sont des estimations de durée utilisées par l'optimiseur, pas des horaires officiels.
   </p>
 
   <div class="legend">
-    <div><span class="green">●</span> <b>Entrée</b> = tickets garantis à l'inscription</div>
+    <div><span class="green">●</span> <b>Entrée / Défaite</b> = tickets garantis (participation ou par ronde perdue)</div>
     <div><span class="blue">●</span> <b>Victoire</b> = tickets par ronde remportée</div>
     <div><span class="purple">●</span> <b>Perfect</b> = bonus si toutes les rondes sont gagnées</div>
     <div><span class="gold">●</span> <b>Max</b> = total maximum possible</div>
@@ -532,7 +541,7 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
     <table class="wide stackable">
       <thead><tr>
         <th>Format</th><th>Prix</th><th>Structure</th><th>Produit</th>
-        <th>Entrée</th><th>Par ronde jouée</th><th>Par victoire</th>
+        <th>Entrée</th><th>Par ronde jouée</th><th>Par défaite</th><th>Par victoire</th>
         <th>Bonus perfect</th><th>Maximum</th>
       </tr></thead>
       <tbody id="planningFormatSummary"></tbody>
@@ -548,40 +557,39 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
   <h2>Farm — On-Demand Pack Rush</h2>
 
   <p class="note small">
-    Le On-Demand Pack Rush est traité séparément des Ink Sprint Pack Rush programmés.
-    Les paramètres officiels Paris 2026 ne sont pas publiés : tous les champs sont modifiables.
+    Le On-Demand Pack Rush (£18, 2 boosters Hyperia City, 1 ronde BO1, 2000 tickets au gagnant / 1000 au perdant)
+    est traité séparément des Ink Sprint Pack Rush programmés. Créneau on-demand : 09:00–18:00. Tous les champs sont modifiables.
   </p>
 
   <div class="grid">
     <div><label for="farmPreset">Barème utilisé</label>
       <select id="farmPreset">
-        <option value="historic">Historique anciens challenges (2 j. = 30 €, 10/10 + 20 gagnant)</option>
-        <option value="paris">Barème Paris 2026 estimé (25 €, 120 / 120)</option>
+        <option value="london">Barème officiel Londres (£18, 2000 V / 1000 D)</option>
         <option value="custom">Personnalisé</option>
       </select></div>
 
-    <div><label for="farmPrice">Prix par joueur / run (€)</label>
-      <input id="farmPrice" type="number" value="15" min="0" step="0.5" inputmode="decimal"></div>
+    <div><label for="farmPrice">Prix par joueur / run (£)</label>
+      <input id="farmPrice" type="number" value="18" min="0" step="0.5" inputmode="decimal"></div>
 
     <div><label for="farmPacks">Boosters par joueur / run</label>
       <input id="farmPacks" type="number" value="2" min="0" step="1" inputmode="numeric"></div>
 
-    <div><label for="farmPackValue">Valeur d'un booster (€)</label>
-      <input id="farmPackValue" type="number" value="5" min="0" step="0.1" inputmode="decimal"></div>
+    <div><label for="farmPackValue">Valeur d'un booster (£)</label>
+      <input id="farmPackValue" type="number" value="4.5" min="0" step="0.1" inputmode="decimal"></div>
 
     <div><label for="farmWinTickets">Tickets du gagnant (total)</label>
-      <input id="farmWinTickets" type="number" value="30" min="0" step="1" inputmode="numeric"></div>
+      <input id="farmWinTickets" type="number" value="2000" min="0" step="100" inputmode="numeric"></div>
 
     <div><label for="farmLossTickets">Tickets du perdant (total)</label>
-      <input id="farmLossTickets" type="number" value="10" min="0" step="1" inputmode="numeric"></div>
+      <input id="farmLossTickets" type="number" value="1000" min="0" step="100" inputmode="numeric"></div>
 
     <div><label for="farmDuration">Durée moyenne d'un run (minutes)</label>
-      <input id="farmDuration" type="number" value="30" min="1" step="5" inputmode="numeric"></div>
+      <input id="farmDuration" type="number" value="25" min="1" step="5" inputmode="numeric"></div>
 
     <div><label for="farmPlayers">Nombre de joueurs de ton groupe</label>
       <input id="farmPlayers" type="number" value="2" min="1" step="1" inputmode="numeric"></div>
 
-    <div><label for="farmBudget">Budget total du groupe (€)</label>
+    <div><label for="farmBudget">Budget total du groupe (£)</label>
       <input id="farmBudget" type="number" value="200" min="0" step="5" inputmode="numeric"></div>
 
     <div><label for="farmTime">Temps disponible (minutes)</label>
@@ -613,8 +621,8 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
     <div class="stat"><div class="label">Tickets minimum</div><div class="value green" id="farmMinTickets">—</div></div>
     <div class="stat"><div class="label">Tickets moyens</div><div class="value green" id="farmAvgTickets">—</div></div>
     <div class="stat"><div class="label">Tickets maximum</div><div class="value green" id="farmMaxTickets">—</div></div>
-    <div class="stat"><div class="label">Tickets / € moyens</div><div class="value purple" id="farmRatio">—</div></div>
-    <div class="stat"><div class="label">Coût de 10 tickets</div><div class="value purple" id="farmTicketCost">—</div></div>
+    <div class="stat"><div class="label">Tickets / £ moyens</div><div class="value purple" id="farmRatio">—</div></div>
+    <div class="stat"><div class="label">Coût de 1 000 tickets</div><div class="value purple" id="farmTicketCost">—</div></div>
   </div>
   <div id="farmExplanation" style="margin-top:14px"></div>
 </div>
@@ -625,7 +633,7 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
     <table class="wide stackable">
       <thead><tr>
         <th>Option</th><th>Coût</th><th>Temps</th><th>Boosters</th>
-        <th>Tickets moyens</th><th>Tickets / €</th><th>Tickets / heure</th>
+        <th>Tickets moyens</th><th>Tickets / £</th><th>Tickets / heure</th>
       </tr></thead>
       <tbody id="farmComparison"></tbody>
     </table>
@@ -657,8 +665,8 @@ const nfInt = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 });
 const nf2   = new Intl.NumberFormat("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 const fmtInt = (n) => nfInt.format(Math.round(n));
-const fmtEur = (n) => nf2.format(n) + " €";
-const fmtEur0 = (n) => nfInt.format(Math.round(n)) + " €";
+const fmtEur = (n) => "£" + nf2.format(n);
+const fmtEur0 = (n) => "£" + nfInt.format(Math.round(n));
 
 const timeToMinutes = (t) => {
   const [h, m] = String(t).split(":").map(Number);
@@ -673,53 +681,64 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
 
 const DAYS = ["Vendredi", "Samedi", "Dimanche"];
 const DAY_OFFSET = { Vendredi: 0, Samedi: 1440, Dimanche: 2880 };
-const DAY_DATE = { Vendredi: "11/09", Samedi: "12/09", Dimanche: "13/09" };
+const DAY_DATE = { Vendredi: "13/11", Samedi: "14/11", Dimanche: "15/11" };
 
 /* =========================================================
-   DONNÉES — FORMATS
+   DONNÉES — FORMATS (Londres, relevé my.fanfinity.gg le 12/11/2026)
 
-   Modèle unifié (remplace l'ancien hack "fixedTickets") :
-     tickets = base
-             + rounds * perRound          (tickets par ronde jouée)
-             + wins   * perWin            (tickets par ronde gagnée)
-             + perfectBonus si wins === rounds
-   L'Entry-Level est donc 80 d'entrée + 80 par ronde jouée = 320 garantis,
-   ce qui réconcilie enfin le tableau du planning et le calcul de l'optimiseur.
+   tickets = base                       (participation)
+           + rounds * perRound          (par ronde jouée)
+           + wins   * perWin            (par ronde gagnée)
+           + losses * perLoss           (par ronde perdue)
+           + perfectBonus si wins === rounds   (ligne « 3 wins » Fanfinity, lue comme bonus)
+   Prix = par joueur. Events en équipe : prix équipe ÷ nb de joueurs.
+   packs = boosters Hyperia City · oldPacks = boosters d'autres sets.
 ========================================================= */
 const FORMATS = {
-  core:           { name:"Core Constructed",            category:"constructed", price:25,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3",       base:120, perRound:0,  perWin:120, perfectBonus:120, duration:195 },
-  double:         { name:"Core Constructed Double-Up",  category:"constructed", price:50,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3",       base:240, perRound:0,  perWin:240, perfectBonus:240, duration:195 },
-  entry:          { name:"Entry-Level Core Constructed",category:"constructed", price:25,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3",       base:80,  perRound:80, perWin:0,   perfectBonus:0,   duration:195, guaranteed:true },
-  sealed:         { name:"Sealed Deck",                 category:"sealed",      price:45,  packs:6,  oldPacks:0,  rounds:3, structure:"3 rondes BO3",       base:120, perRound:0,  perWin:120, perfectBonus:120, duration:210 },
-  box:            { name:"Full Box Sealed",             category:"sealed",      price:120, packs:24, oldPacks:0,  rounds:3, structure:"3 rondes BO3",       base:120, perRound:0,  perWin:120, perfectBonus:0,   duration:240 },
-  infinity:       { name:"Infinity Constructed",        category:"constructed", price:25,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3",       base:120, perRound:0,  perWin:120, perfectBonus:120, duration:195 },
-  chaos:          { name:"Chaos Sealed",                category:"sealed",      price:75,  packs:4,  oldPacks:12, rounds:3, structure:"3 rondes BO3",       base:120, perRound:0,  perWin:120, perfectBonus:120, duration:225 },
-  team:           { name:"Team Trios Sealed / joueur",  category:"sealed",      price:50,  packs:8,  oldPacks:0,  rounds:3, structure:"3 rondes BO3 équipe",base:120, perRound:0,  perWin:120, perfectBonus:120, duration:255, team:true },
-  sprintCore:     { name:"Ink Sprint Core",             category:"sprint",      price:20,  packs:0,  oldPacks:0,  rounds:2, structure:"2 rondes BO1",       base:120, perRound:0,  perWin:120, perfectBonus:0,   duration:90 },
-  sprintInfinity: { name:"Ink Sprint Infinity",         category:"sprint",      price:20,  packs:0,  oldPacks:0,  rounds:2, structure:"2 rondes BO1",       base:120, perRound:0,  perWin:120, perfectBonus:0,   duration:90 },
-  packrush:       { name:"Ink Sprint Pack Rush",        category:"sprint",      price:25,  packs:2,  oldPacks:0,  rounds:2, structure:"2 rondes BO1",       base:120, perRound:0,  perWin:120, perfectBonus:0,   duration:90 }
+  core:          { name:"Core Constructed",              category:"constructed", price:18,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3",                     base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:195 },
+  double:        { name:"Core Constructed Double-Up",    category:"constructed", price:36,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3",                     base:0,    perRound:0,    perWin:4000, perLoss:1000, perfectBonus:6000, duration:195 },
+  infDouble:     { name:"Infinity Constructed Double-Up",category:"constructed", price:36,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3",                     base:0,    perRound:0,    perWin:4000, perLoss:1000, perfectBonus:6000, duration:195 },
+  bare:          { name:"The Bare Necessities",          category:"constructed", price:18,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3 · 2 encres, 1 SR, 5 R max",base:0, perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:195 },
+  entry:         { name:"Entry-Level Core Constructed",  category:"constructed", price:15,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3",                     base:0,    perRound:1000, perWin:0,    perLoss:0,    perfectBonus:0,    duration:195, guaranteed:true },
+  starter:       { name:"Starter Deck",                  category:"constructed", price:25,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3 · 1 starter deck fourni", base:0, perRound:1000, perWin:0,    perLoss:0,    perfectBonus:0,    duration:180, guaranteed:true },
+  sealed:        { name:"Sealed Deck (6 packs)",         category:"sealed",      price:42,  packs:6,  oldPacks:0,  rounds:3, structure:"3 rondes BO3 · deck 40",           base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:210 },
+  sealedDouble:  { name:"Sealed Deck Double-Up (6 packs)",category:"sealed",     price:60,  packs:6,  oldPacks:0,  rounds:3, structure:"3 rondes BO3 · deck 40",           base:0,    perRound:0,    perWin:4000, perLoss:1000, perfectBonus:6000, duration:210 },
+  draft:         { name:"Booster Draft (4 packs)",       category:"sealed",      price:34,  packs:4,  oldPacks:0,  rounds:3, structure:"3 rondes BO3",                     base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:225 },
+  superSealed:   { name:"Super Sealed (16 packs)",       category:"sealed",      price:82,  packs:4,  oldPacks:12, rounds:3, structure:"3 rondes BO3 · 4 HC + 4 AotV + 4 WU + 4 WS · 3 encres", base:0, perRound:0, perWin:2000, perLoss:500, perfectBonus:3000, duration:240 },
+  chaos:         { name:"Chaos Sealed (8 packs)",        category:"sealed",      price:50,  packs:0,  oldPacks:8,  rounds:3, structure:"3 rondes BO3 · sets variés",       base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:225 },
+  box:           { name:"Full Box Sealed (24 packs)",    category:"sealed",      price:114, packs:24, oldPacks:0,  rounds:3, structure:"3 rondes BO3 · deck 60, 2 encres", base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:240 },
+  sprintSealed:  { name:"Ink Sprint Sealed (6 packs)",   category:"sprint",      price:34,  packs:6,  oldPacks:0,  rounds:2, structure:"2 rondes BO1",                     base:1000, perRound:0,    perWin:1000, perLoss:0,    perfectBonus:0,    duration:120 },
+  sprintCore:    { name:"Ink Sprint Core Constructed",   category:"sprint",      price:10,  packs:0,  oldPacks:0,  rounds:2, structure:"2 rondes BO1",                     base:1000, perRound:0,    perWin:1000, perLoss:0,    perfectBonus:0,    duration:90 },
+  packrush:      { name:"Ink Sprint Pack Rush (2×2 packs)",category:"sprint",    price:26,  packs:4,  oldPacks:0,  rounds:2, structure:"2 rondes BO1 · 15 lore",           base:1000, perRound:0,    perWin:1000, perLoss:0,    perfectBonus:0,    duration:90 },
+  villainGaston: { name:"Villain Challenge : Gaston",    category:"premium",     price:60,  packs:0,  oldPacks:0,  rounds:6, structure:"6 rondes BO3 · promo saison R2 · promo Gaston 5V+ · playmat 6-0", base:0, perRound:0, perWin:3000, perLoss:1000, perfectBonus:0, duration:390 },
+  villainUrsula: { name:"Villain Challenge : Ursula",    category:"premium",     price:60,  packs:0,  oldPacks:0,  rounds:6, structure:"6 rondes BO3 · promo saison R2 · promo Ursula 5V+ · playmat 6-0", base:0, perRound:0, perWin:3000, perLoss:1000, perfectBonus:0, duration:390 },
+  pinMim:        { name:"Pin Pursuit : Madam Mim",       category:"premium",     price:60,  packs:0,  oldPacks:0,  rounds:4, structure:"4 rondes BO3 · promo saison R2 · promo Mim 4-0", base:0, perRound:0, perWin:3000, perLoss:1500, perfectBonus:0, duration:260 },
+  teamBox:       { name:"Team Trios Full Box / joueur",  category:"team",        price:50,  packs:0,  oldPacks:8,  rounds:3, structure:"3 rondes BO3 équipe · £150 l'équipe · 24 AotV", base:0, perRound:0, perWin:2000, perLoss:500, perfectBonus:3000, duration:270, team:true },
+  team2v2:       { name:"2v2 Team Play / joueur",        category:"team",        price:18,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO1 · £36 l'équipe",      base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:150, team:true },
+  teamInk:       { name:"Team Trios All-Ink Core / joueur",category:"team",      price:18,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3 · £54 l'équipe",      base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:210, team:true }
 };
 
 /* =========================================================
-   DONNÉES — PLANNING
+   DONNÉES — PLANNING (my.fanfinity.gg, Disney Lorcana Challenge London)
 ========================================================= */
 const EVENTS = [
-  ["Vendredi","13:00","double"],["Vendredi","13:30","entry"],["Vendredi","15:00","sealed"],
-  ["Vendredi","16:00","box"],["Vendredi","16:30","infinity"],["Vendredi","17:30","sprintCore"],
-  ["Vendredi","18:00","packrush"],
+  ["Vendredi","11:00","sealedDouble"],["Vendredi","12:00","entry"],["Vendredi","13:00","draft"],
+  ["Vendredi","14:00","core"],["Vendredi","14:30","bare"],["Vendredi","15:00","superSealed"],
+  ["Vendredi","15:30","chaos"],["Vendredi","16:00","sealedDouble"],["Vendredi","16:30","double"],
+  ["Vendredi","17:00","sprintSealed"],["Vendredi","17:30","sprintCore"],["Vendredi","18:00","packrush"],
 
-  ["Samedi","09:00","double"],["Samedi","09:15","entry"],["Samedi","09:30","sealed"],
-  ["Samedi","09:45","chaos"],["Samedi","10:00","infinity"],["Samedi","10:15","team"],
-  ["Samedi","13:00","double"],["Samedi","13:15","entry"],["Samedi","13:30","core"],
-  ["Samedi","14:30","sealed"],["Samedi","14:45","chaos"],["Samedi","15:45","team"],
-  ["Samedi","17:00","double"],["Samedi","17:00","core"],["Samedi","17:15","entry"],
-  ["Samedi","19:45","packrush"],
+  ["Samedi","09:00","villainGaston"],["Samedi","09:30","sealedDouble"],["Samedi","10:00","superSealed"],
+  ["Samedi","11:00","box"],["Samedi","12:00","core"],["Samedi","13:00","entry"],
+  ["Samedi","14:00","sealed"],["Samedi","14:30","bare"],["Samedi","15:00","starter"],
+  ["Samedi","15:30","chaos"],["Samedi","16:00","double"],["Samedi","16:30","infDouble"],
+  ["Samedi","17:00","sprintSealed"],["Samedi","17:30","sprintCore"],["Samedi","18:00","packrush"],
 
-  ["Dimanche","09:00","double"],["Dimanche","09:15","entry"],["Dimanche","09:30","sealed"],
-  ["Dimanche","09:45","chaos"],["Dimanche","10:00","infinity"],["Dimanche","10:15","team"],
-  ["Dimanche","13:00","double"],["Dimanche","13:15","entry"],["Dimanche","13:30","core"],
-  ["Dimanche","14:30","sealed"],["Dimanche","14:45","chaos"],
-  ["Dimanche","17:00","packrush"],["Dimanche","17:00","sprintInfinity"],["Dimanche","17:15","sprintCore"]
+  ["Dimanche","09:00","villainUrsula"],["Dimanche","09:30","teamBox"],["Dimanche","10:00","superSealed"],
+  ["Dimanche","10:30","team2v2"],["Dimanche","11:00","double"],["Dimanche","11:30","teamInk"],
+  ["Dimanche","12:00","infDouble"],["Dimanche","12:30","chaos"],["Dimanche","13:00","entry"],
+  ["Dimanche","13:30","box"],["Dimanche","14:00","pinMim"],["Dimanche","14:30","bare"],
+  ["Dimanche","15:00","double"],["Dimanche","15:30","superSealed"],["Dimanche","16:00","sprintSealed"],
+  ["Dimanche","16:30","sprintCore"],["Dimanche","17:00","packrush"]
 ].map(([day, start, format], index) => ({
   index, day, date: DAY_DATE[day], start, format,
   startMin: DAY_OFFSET[day] + timeToMinutes(start),
@@ -728,25 +747,25 @@ const EVENTS = [
 
 /* =========================================================
    DONNÉES — PRIZE WALL
+   Londres pas encore publié : liste Paris × 15 (badge 160 → 2400).
 ========================================================= */
+const PW_SCALE = 15;
 const PRIZES = [
-  { name:"Booster Lorcana",                     cost:40,    status:"Estimation historique" },
-  { name:"Stand Out — promo non-foil",          cost:100,   status:"Estimation" },
-  { name:"Down in New Orleans — promo non-foil",cost:100,   status:"Estimation" },
-  { name:"Headless Horseman — Cursed Rider",    cost:200,   status:"Estimation" },
-  { name:"Tinker Bell — Insistent Fairy",       cost:300,   status:"Estimation" },
-  { name:"Dragon Fire — promo non-foil",        cost:100,   status:"Estimation" },
-  { name:"Let It Go — promo non-foil",          cost:100,   status:"Estimation" },
-  { name:"Mulan — Charging Ahead",              cost:300,   status:"Estimation niveau intermédiaire" },
-  { name:"Simba — Pride Protector",             cost:500,   status:"Estimation niveau supérieur" },
-  { name:"Elsa — Ice Maker",                    cost:700,   status:"Historique comparable" },
-  { name:"Pegasus — Gift for Hercules",         cost:100,   status:"Estimation entrée" },
-  { name:"Playmat Mulan",                       cost:3200,  status:"Historique comparable" },
-  { name:"Playmat Simba",                       cost:3200,  status:"Historique comparable" },
-  { name:"Uncut Sheet Rare non-foil",           cost:16000, status:"Historique comparable" },
-  { name:"Elsa Pin",                            cost:0,     status:"Prix inconnu" },
-  { name:"DLC Hat",                             cost:0,     status:"Prix inconnu" }
-];
+  { name:"Booster Lorcana",                     cost:40,    status:"Estimation (réf. Paris ×15)" },
+  { name:"Stand Out — promo non-foil",          cost:100,   status:"Estimation (réf. Paris ×15)" },
+  { name:"Down in New Orleans — promo non-foil",cost:100,   status:"Estimation (réf. Paris ×15)" },
+  { name:"Headless Horseman — Cursed Rider",    cost:200,   status:"Estimation (réf. Paris ×15)" },
+  { name:"Tinker Bell — Insistent Fairy",       cost:300,   status:"Estimation (réf. Paris ×15)" },
+  { name:"Dragon Fire — promo non-foil",        cost:100,   status:"Estimation (réf. Paris ×15)" },
+  { name:"Let It Go — promo non-foil",          cost:100,   status:"Estimation (réf. Paris ×15)" },
+  { name:"Mulan — Charging Ahead",              cost:300,   status:"Estimation (réf. Paris ×15)" },
+  { name:"Simba — Pride Protector",             cost:500,   status:"Estimation (réf. Paris ×15)" },
+  { name:"Elsa — Ice Maker",                    cost:700,   status:"Estimation (réf. Paris ×15)" },
+  { name:"Pegasus — Gift for Hercules",         cost:100,   status:"Estimation (réf. Paris ×15)" },
+  { name:"Playmat",                             cost:3200,  status:"Estimation (réf. Paris ×15)" },
+  { name:"Uncut Sheet Rare non-foil",           cost:16000, status:"Estimation (réf. Paris ×15)" },
+  { name:"Pin",                                 cost:0,     status:"Prix inconnu" }
+].map((p) => ({ ...p, cost: p.cost * PW_SCALE }));
 
 /* =========================================================
    FORMULES TICKETS
@@ -756,6 +775,7 @@ function ticketsAtWins(f, wins) {
   return f.base
        + f.rounds * (f.perRound || 0)
        + w * (f.perWin || 0)
+       + (f.rounds - w) * (f.perLoss || 0)
        + (w === f.rounds ? (f.perfectBonus || 0) : 0);
 }
 
@@ -764,6 +784,7 @@ function expectedTickets(f, p) {
   return f.base
        + f.rounds * (f.perRound || 0)
        + f.rounds * p * (f.perWin || 0)
+       + f.rounds * (1 - p) * (f.perLoss || 0)
        + (f.perfectBonus || 0) * Math.pow(p, f.rounds);
 }
 
@@ -773,7 +794,7 @@ const packsLabel = (f) => {
   if (!f.packs && !f.oldPacks) return "—";
   const parts = [];
   if (f.packs) parts.push(f.packs + " booster" + (f.packs > 1 ? "s" : ""));
-  if (f.oldPacks) parts.push(f.oldPacks + " anciens");
+  if (f.oldPacks) parts.push(f.oldPacks + " autres sets");
   return parts.join(" + ");
 };
 
@@ -865,15 +886,19 @@ function calculateOptimizer() {
   const p          = Math.min(1, Math.max(0, num("optWinrate") / 100));
   const newPack    = num("optNewPack");
   const oldPack    = num("optOldPack");
-  const ticketEuro = num("optTicketValue") / 10;   // € par ticket
+  const ticketEuro = num("optTicketValue") / 1000; // £ par ticket
   const badge      = num("optBadge");
   const objective  = $("optObjective").value;
   const buffer     = Math.max(0, num("optBuffer"));
   const teamAllowed    = $("optTeam").value === "yes";
-  const saturdayBlocked = $("optSaturday").value === "main";
-  const sundayBlocked   = $("optSunday").value === "top16";
-  const lcq            = $("optFriday").value === "lcq";
-  const fridayFrom     = lcq ? timeToMinutes($("optLcqEnd").value || "13:00") : 0;
+  const friMode   = $("optFriday").value;
+  const satMode   = $("optSaturday").value;
+  const sunMode   = $("optSunday").value;
+  const saturdayBlocked = satMode === "me2" || satMode === "me1d2";
+  const sundayBlocked   = sunMode === "main";
+  const fridayFrom   = friMode === "me1" ? timeToMinutes($("optFriFrom").value || "21:00") : 0;
+  const saturdayFrom = satMode === "ccq" ? timeToMinutes($("optSatFrom").value || "14:00") : 0;
+  renderSituationNote(friMode, satMode, sunMode);
 
   const candidates = [];
   let skipped = 0;
@@ -885,6 +910,7 @@ function calculateOptimizer() {
     const f = FORMATS[e.format];
     if (f.team && !teamAllowed) { skipped++; continue; }
     if (e.day === "Vendredi" && timeToMinutes(e.start) < fridayFrom) { skipped++; continue; }
+    if (e.day === "Samedi"   && timeToMinutes(e.start) < saturdayFrom) { skipped++; continue; }
 
     const expected   = expectedTickets(f, p);
     const products   = productValueOf(f, newPack, oldPack);
@@ -924,9 +950,12 @@ function calculateOptimizer() {
   /* --- planning du parcours --- */
   let html = "";
 
-  if (lcq) {
-    html += `<p class="note small">Vendredi réservé au LCQ jusqu'à ${esc($("optLcqEnd").value || "13:00")} :
-      les events qui commencent avant sont exclus. Dès élimination, tu peux basculer sur les sides disponibles.</p>`;
+  if (friMode === "me1") {
+    html += `<p class="note small">Vendredi réservé au Main Event 1 jusqu'à ${esc($("optFriFrom").value || "21:00")} :
+      les sides qui commencent avant sont exclus. En cas de drop, baisse l'heure pour récupérer les sides de fin de journée.</p>`;
+  }
+  if (satMode === "ccq") {
+    html += `<p class="note small">Samedi : CCQ Infinity à 09:00, sides exclus avant ${esc($("optSatFrom").value || "14:00")}.</p>`;
   }
   if (!chosen.length) {
     html += `<p class="note danger small">Aucun parcours possible : augmente le budget, réduis la marge
@@ -974,6 +1003,32 @@ function calculateOptimizer() {
 }
 
 /* =========================================================
+   RÈGLES MAIN EVENT / CCQ (page Fanfinity Londres)
+========================================================= */
+function renderSituationNote(fri, sat, sun) {
+  const msgs = [];
+  let danger = false;
+  if (fri === "me1" && sat === "me2") {
+    danger = true;
+    msgs.push("<b>Impossible :</b> on ne peut pas jouer Main Event 1 et Main Event 2 (un seul ticket Main Event par personne).");
+  }
+  if (fri !== "me1" && sat === "me1d2") {
+    danger = true;
+    msgs.push("<b>Incohérent :</b> le Day 2 du Main Event 1 suppose d'avoir joué le Main Event 1 vendredi.");
+  }
+  if (sat === "ccq") {
+    msgs.push("Le ticket CCQ (£50) n'inclut pas de badge : il faut aussi un ticket Main Event ou Attendee (£35) pour entrer.");
+  }
+  if (fri === "free" && sat !== "me2" && sat !== "ccq") {
+    msgs.push("Sans Main Event, il te faut un ticket Attendee (£35, 2400 tickets Prize Wall inclus) pour accéder aux sides.");
+  }
+  msgs.push("ME1 : 8 rondes vendredi, cut à 18 pts, 7 rondes samedi, Top 8 dimanche. ME2 : 11 rondes sam.–dim., sans top cut.");
+  const el = $("optSituationNote");
+  el.className = "note small" + (danger ? " danger" : "");
+  el.innerHTML = msgs.join("<br>");
+}
+
+/* =========================================================
    TABLEAU DE COMPARAISON DES FORMATS
 ========================================================= */
 function renderFormatTable(p, newPack, oldPack, ticketEuro) {
@@ -993,7 +1048,7 @@ function renderFormatTable(p, newPack, oldPack, ticketEuro) {
       <td data-label="Boosters">${esc(packsLabel(f))}</td>
       <td data-label="Tickets selon victoires" style="white-space:normal">${detail}</td>
       <td data-label="Tickets moyens" class="green"><b>${fmtInt(avg)}</b></td>
-      <td data-label="Tickets / €">${nf2.format(avg / f.price)}</td>
+      <td data-label="Tickets / £">${nf2.format(avg / f.price)}</td>
       <td data-label="Valeur boosters" class="blue">${fmtEur(packs)}</td>
       <td data-label="Valeur nette" class="${net >= 0 ? "green" : "red"}">${fmtEur(net)}</td>
     </tr>`;
@@ -1010,11 +1065,11 @@ function renderEconomy() {
   const prizeCost   = Math.max(1, num("ecoPrizeTickets", 1));
   const packEuro    = num("optNewPack");
 
-  const farmPer10  = (farmCost / farmTickets) * 10;
-  const prizePer10 = (packEuro / prizeCost) * 10;
+  const farmPer10  = (farmCost / farmTickets) * 1000;
+  const prizePer10 = (packEuro / prizeCost) * 1000;
 
-  $("ecoFarmOut").textContent  = `${nf2.format(farmPer10)} € / 10 tickets`;
-  $("ecoPrizeOut").textContent = `${nf2.format(prizePer10)} € / 10 tickets`;
+  $("ecoFarmOut").textContent  = `£${nf2.format(farmPer10)} / 1 000 tickets`;
+  $("ecoPrizeOut").textContent = `£${nf2.format(prizePer10)} / 1 000 tickets`;
 
   const ratio = prizePer10 > 0 ? farmPer10 / prizePer10 : 0;
   $("ecoGapOut").textContent = ratio ? `× ${nf2.format(ratio)}` : "—";
@@ -1022,14 +1077,11 @@ function renderEconomy() {
   const warn = $("ecoWarning");
   if (ratio >= 1.5 || (ratio > 0 && ratio <= 1 / 1.5)) {
     warn.style.display = "";
-    warn.innerHTML = `<b>Attention — les deux barèmes ne parlent pas de la même unité.</b>
-      Acheter des tickets via le Pack Rush revient à <b>${nf2.format(farmPer10)} €</b> les 10 tickets,
-      alors que les dépenser au Prize Wall les valorise à <b>${nf2.format(prizePer10)} €</b> les 10.
-      Un écart de ×${nf2.format(ratio)} signifie presque à coup sûr que l'échelle de tickets des
-      anciens challenges (10 / 20 par partie) et celle annoncée pour Paris 2026 (120 par entrée)
-      ne sont pas la même monnaie. Tant que Fanfinity n'a pas publié la grille officielle,
-      garde la référence Prize Wall pour la valeur nette et sers-toi de la référence Pack Rush
-      uniquement pour comparer des méthodes de farm entre elles.`;
+    warn.innerHTML = `<b>Les deux références divergent.</b>
+      Acheter des tickets via le Pack Rush On-Demand revient à <b>£${nf2.format(farmPer10)}</b> les 1 000 tickets,
+      alors que le Prize Wall (coût estimé du booster) les valorise à <b>£${nf2.format(prizePer10)}</b> les 1 000.
+      Tant que Fanfinity n'a pas publié le Prize Wall de Londres, corrige le coût du booster sur place
+      avant de te fier à la valeur nette.`;
   } else {
     warn.style.display = "none";
   }
@@ -1048,7 +1100,7 @@ function initPrizeWall() {
       </td>
       <td data-label="Lot">${esc(p.name)}</td>
       <td data-label="Prix tickets">
-        <input data-pw="cost" data-i="${i}" type="number" min="0" step="10" value="${p.cost}" inputmode="numeric" style="width:110px;display:inline-block">
+        <input data-pw="cost" data-i="${i}" type="number" min="0" step="50" value="${p.cost}" inputmode="numeric" style="width:110px;display:inline-block">
       </td>
       <td data-label="Quantité">
         <input data-pw="qty" data-i="${i}" type="number" min="1" step="1" value="1" inputmode="numeric" style="width:80px;display:inline-block">
@@ -1143,8 +1195,10 @@ function renderPlanning() {
       const end = timeToMinutes(e.start) + f.duration;
       const packs = packsLabel(f);
 
-      const chips = [`<span class="chip green">+${fmtInt(f.base)} entrée</span>`];
+      const chips = [];
+      if (f.base)     chips.push(`<span class="chip green">+${fmtInt(f.base)} entrée</span>`);
       if (f.perRound) chips.push(`<span class="chip green">+${fmtInt(f.perRound)} / ronde jouée</span>`);
+      if (f.perLoss)  chips.push(`<span class="chip green">+${fmtInt(f.perLoss)} / défaite</span>`);
       if (f.perWin)   chips.push(`<span class="chip blue">+${fmtInt(f.perWin)} / victoire</span>`);
       if (f.perfectBonus) chips.push(`<span class="chip purple">+${fmtInt(f.perfectBonus)} perfect</span>`);
       chips.push(`<span class="chip gold">${fmtInt(ticketsAtWins(f, f.rounds))} max</span>`);
@@ -1175,8 +1229,9 @@ function renderPlanningSummary() {
       <td data-label="Prix">${fmtEur0(f.price)}</td>
       <td data-label="Structure" style="white-space:normal">${esc(f.structure)}</td>
       <td data-label="Produit">${esc(packsLabel(f))}</td>
-      <td data-label="Entrée" class="green">${fmtInt(f.base)}</td>
+      <td data-label="Entrée" class="green">${f.base ? fmtInt(f.base) : "—"}</td>
       <td data-label="Par ronde jouée">${f.perRound ? "+" + fmtInt(f.perRound) : "—"}</td>
+      <td data-label="Par défaite" class="green">${f.perLoss ? "+" + fmtInt(f.perLoss) : "—"}</td>
       <td data-label="Par victoire" class="blue">${f.perWin ? "+" + fmtInt(f.perWin) : "—"}</td>
       <td data-label="Bonus perfect" class="purple">${f.perfectBonus ? "+" + fmtInt(f.perfectBonus) : "—"}</td>
       <td data-label="Maximum" class="gold"><b>${fmtInt(ticketsAtWins(f, f.rounds))}</b></td>
@@ -1187,8 +1242,7 @@ function renderPlanningSummary() {
    FARM ON-DEMAND
 ========================================================= */
 const FARM_PRESETS = {
-  historic: { farmPrice: 15, farmPacks: 2, farmPackValue: 5, farmWinTickets: 30, farmLossTickets: 10, farmDuration: 30 },
-  paris:    { farmPrice: 25, farmPacks: 2, farmPackValue: 5, farmWinTickets: 120, farmLossTickets: 120, farmDuration: 30 }
+  london: { farmPrice: 18, farmPacks: 2, farmPackValue: 4.5, farmWinTickets: 2000, farmLossTickets: 1000, farmDuration: 25 }
 };
 
 let farmPresetLock = false;
@@ -1282,7 +1336,7 @@ function calculateFarm() {
 
   const packsValue = totalPacks * packValue;
   const ratio      = cost > 0 ? avgTickets / cost : 0;
-  const per10      = avgTickets > 0 ? (cost / avgTickets) * 10 : 0;
+  const per10      = avgTickets > 0 ? (cost / avgTickets) * 1000 : 0;
 
   $("farmRuns").textContent         = runsLabel;
   $("farmTimeUsed").textContent     = fmtInt(timeUsed) + " min";
@@ -1293,7 +1347,7 @@ function calculateFarm() {
   $("farmAvgTickets").textContent   = fmtInt(avgTickets);
   $("farmMaxTickets").textContent   = fmtInt(maxTickets);
   $("farmRatio").textContent        = nf2.format(ratio);
-  $("farmTicketCost").textContent   = avgTickets > 0 ? nf2.format(per10) + " €" : "—";
+  $("farmTicketCost").textContent   = avgTickets > 0 ? "£" + nf2.format(per10) : "—";
   $("farmExplanation").innerHTML    = explanation;
 
   renderFarmComparison(
@@ -1308,7 +1362,7 @@ function renderFarmComparison(farm, packValue, winrate) {
 
   const rows = [
     { name: "On-Demand Farm calculé", cost: f.cost, time: f.timeUsed, packs: f.packs, tickets: f.tickets, highlight: true },
-    ...["core", "double", "sprintCore", "packrush"].map((k) => {
+    ...["core", "double", "sealed", "sprintCore", "packrush"].map((k) => {
       const fmt = FORMATS[k];
       return {
         name: fmt.name, cost: fmt.price, time: fmt.duration,
@@ -1317,20 +1371,7 @@ function renderFarmComparison(farm, packValue, winrate) {
     })
   ];
 
-  // Les side events utilisent le barème 120 tickets. Si le farm tourne sur le barème
-  // historique (10 / 20), les colonnes « tickets » ne sont pas dans la même unité.
-  const sideBase = FORMATS.core.base;
-  const farmBase = num("farmWinTickets") + num("farmLossTickets");
-  const warnEl = $("farmScaleWarning");
-  const mixed = farmBase > 0 && (sideBase / (farmBase / 2) >= 3 || (farmBase / 2) / sideBase >= 3);
-  warnEl.style.display = mixed ? "" : "none";
-  if (mixed) {
-    warnEl.innerHTML = `<b>Barèmes différents — ne compare que les colonnes « Coût » et « Temps ».</b>
-      Le farm est réglé sur le barème historique (≈ ${fmtInt(farmBase / 2)} tickets par joueur et par partie)
-      alors que les side events ci-dessous utilisent le barème annoncé pour Paris 2026
-      (${fmtInt(sideBase)} tickets à l'entrée). Les colonnes « tickets » ne sont donc pas
-      dans la même unité tant que la grille officielle n'est pas publiée.`;
-  }
+  $("farmScaleWarning").style.display = "none";
 
   $("farmComparison").innerHTML = rows.map((x) => {
     const ratio  = x.cost > 0 ? x.tickets / x.cost : 0;
@@ -1341,7 +1382,7 @@ function renderFarmComparison(farm, packValue, winrate) {
       <td data-label="Temps">${fmtInt(x.time)} min</td>
       <td data-label="Boosters">${fmtInt(x.packs)}</td>
       <td data-label="Tickets moyens" class="green">${fmtInt(x.tickets)}</td>
-      <td data-label="Tickets / €">${nf2.format(ratio)}</td>
+      <td data-label="Tickets / £">${nf2.format(ratio)}</td>
       <td data-label="Tickets / heure" class="purple">${fmtInt(hourly)}</td>
     </tr>`;
   }).join("");
@@ -1376,7 +1417,7 @@ $("planningFilter").addEventListener("change", renderPlanning);
 $("planningDay").addEventListener("change", renderPlanning);
 
 // passer un champ du farm en manuel bascule le barème sur « personnalisé »
-Object.keys(FARM_PRESETS.historic).forEach((id) => {
+Object.keys(FARM_PRESETS.london).forEach((id) => {
   $(id).addEventListener("input", () => {
     if (!farmPresetLock) $("farmPreset").value = "custom";
   });
@@ -1405,12 +1446,12 @@ $("pwClear").addEventListener("click", () => {
 
 $("ecoApplyFarm").addEventListener("click", () => {
   const t = Math.max(1, num("ecoFarmTickets", 1));
-  $("optTicketValue").value = ((num("ecoFarmCost") / t) * 10).toFixed(2);
+  $("optTicketValue").value = ((num("ecoFarmCost") / t) * 1000).toFixed(2);
   calculateOptimizer();
 });
 $("ecoApplyPrize").addEventListener("click", () => {
   const t = Math.max(1, num("ecoPrizeTickets", 1));
-  $("optTicketValue").value = ((num("optNewPack") / t) * 10).toFixed(2);
+  $("optTicketValue").value = ((num("optNewPack") / t) * 1000).toFixed(2);
   calculateOptimizer();
 });
 </script>
