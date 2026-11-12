@@ -301,8 +301,24 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
     <div><label for="optBudget">Budget Side Events (£)</label>
       <input id="optBudget" type="number" value="400" min="0" step="5" inputmode="numeric"></div>
 
-    <div><label for="optWinrate">Winrate estimé (%)</label>
+    <div><label for="optWinrate">Winrate constructed (%)</label>
       <input id="optWinrate" type="number" value="60" min="0" max="100" step="1" inputmode="numeric"></div>
+
+    <div><label for="optWinrateLim">Winrate limited — sealed / draft / pack rush (%)</label>
+      <input id="optWinrateLim" type="number" value="55" min="0" max="100" step="1" inputmode="numeric"></div>
+
+    <div><label for="optSwiss">Modèle d'appariement</label>
+      <select id="optSwiss">
+        <option value="0.05">Suisse réaliste (−5 pts par victoire d'avance)</option>
+        <option value="0.1">Suisse dur (−10 pts par victoire d'avance)</option>
+        <option value="0">Rondes indépendantes (optimiste)</option>
+      </select></div>
+
+    <div><label for="optPerfectMode">Ligne « 3 wins » Fanfinity</label>
+      <select id="optPerfectMode">
+        <option value="bonus">Bonus en plus (3-0 Core = 9 000)</option>
+        <option value="third">3e victoire payée 3 000 (3-0 Core = 7 000)</option>
+      </select></div>
 
     <div><label for="optNewPack">Booster Hyperia City (£)</label>
       <input id="optNewPack" type="number" value="4.5" min="0" step="0.1" inputmode="decimal"></div>
@@ -330,6 +346,17 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
       <input id="optBuffer" type="number" value="10" min="0" step="5" inputmode="numeric"></div>
   </div>
 
+  <h3 class="section-title">Valeur des lots (Villain Challenge / Pin Pursuit)</h3>
+
+  <div class="grid">
+    <div><label for="optPromoSeason">Promo saisonnière ronde 2 (£)</label>
+      <input id="optPromoSeason" type="number" value="3" min="0" step="0.5" inputmode="decimal"></div>
+    <div><label for="optPromoVillain">Promo non-foil Gaston / Ursula / Mim (£)</label>
+      <input id="optPromoVillain" type="number" value="10" min="0" step="0.5" inputmode="decimal"></div>
+    <div><label for="optPlaymat">Playmat Villain 6-0 (£)</label>
+      <input id="optPlaymat" type="number" value="35" min="0" step="1" inputmode="decimal"></div>
+  </div>
+
   <h3 class="section-title">Situation Main Event / CCQ</h3>
 
   <div class="grid">
@@ -352,6 +379,9 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
 
     <div><label for="optSatFrom">Dispo samedi à partir de (si CCQ)</label>
       <input id="optSatFrom" type="time" value="14:00"></div>
+
+    <div><label for="optDay2Prob">Proba de passer le Day 2 ME1 (%)</label>
+      <input id="optDay2Prob" type="number" value="35" min="0" max="100" step="5" inputmode="numeric"></div>
 
     <div><label for="optSunday">Dimanche 15/11</label>
       <select id="optSunday">
@@ -415,11 +445,16 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
     <div class="stat"><div class="label">Dépense totale</div><div class="value gold" id="optResultCost">—</div></div>
     <div class="stat"><div class="label">Tickets attendus</div><div class="value green" id="optResultTickets">—</div></div>
     <div class="stat"><div class="label">Total avec badge</div><div class="value green" id="optResultWithBadge">—</div></div>
-    <div class="stat"><div class="label">Valeur boosters</div><div class="value blue" id="optResultProducts">—</div></div>
+    <div class="stat"><div class="label">Valeur boosters + lots</div><div class="value blue" id="optResultProducts">—</div></div>
     <div class="stat"><div class="label">Valeur Prize Wall estimée</div><div class="value blue" id="optResultPrize">—</div></div>
     <div class="stat"><div class="label">Valeur nette estimée</div><div class="value" id="optResultNet">—</div></div>
   </div>
   <div id="optSchedule"></div>
+</div>
+
+<div class="panel" id="planBPanel">
+  <h2>Plan B <span class="hint">l'autre issue du Main Event 1</span></h2>
+  <div id="optPlanB"></div>
 </div>
 
 <div class="panel">
@@ -430,13 +465,14 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
         <th>Format</th><th>Prix</th><th>Boosters</th>
         <th>Tickets selon les victoires</th>
         <th>Tickets moyens</th><th>Tickets / £</th>
-        <th>Valeur boosters</th><th>Valeur nette</th>
+        <th>Boosters + lots</th><th>Valeur nette</th>
       </tr></thead>
       <tbody id="optFormatTable"></tbody>
     </table>
   </div>
   <p class="small" style="margin-top:10px">
-    « Tickets moyens » applique le winrate saisi. « Valeur nette » = boosters + tickets valorisés − prix d'entrée.
+    « Tickets moyens » applique le winrate du format (constructed ou limited) et le modèle d'appariement choisi.
+    « Valeur nette » = boosters + promos/playmats espérés + tickets valorisés − prix d'entrée.
   </p>
 </div>
 </section>
@@ -701,19 +737,19 @@ const FORMATS = {
   bare:          { name:"The Bare Necessities",          category:"constructed", price:18,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3 · 2 encres, 1 SR, 5 R max",base:0, perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:195 },
   entry:         { name:"Entry-Level Core Constructed",  category:"constructed", price:15,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3",                     base:0,    perRound:1000, perWin:0,    perLoss:0,    perfectBonus:0,    duration:195, guaranteed:true },
   starter:       { name:"Starter Deck",                  category:"constructed", price:25,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3 · 1 starter deck fourni", base:0, perRound:1000, perWin:0,    perLoss:0,    perfectBonus:0,    duration:180, guaranteed:true },
-  sealed:        { name:"Sealed Deck (6 packs)",         category:"sealed",      price:42,  packs:6,  oldPacks:0,  rounds:3, structure:"3 rondes BO3 · deck 40",           base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:210 },
-  sealedDouble:  { name:"Sealed Deck Double-Up (6 packs)",category:"sealed",     price:60,  packs:6,  oldPacks:0,  rounds:3, structure:"3 rondes BO3 · deck 40",           base:0,    perRound:0,    perWin:4000, perLoss:1000, perfectBonus:6000, duration:210 },
-  draft:         { name:"Booster Draft (4 packs)",       category:"sealed",      price:34,  packs:4,  oldPacks:0,  rounds:3, structure:"3 rondes BO3",                     base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:225 },
-  superSealed:   { name:"Super Sealed (16 packs)",       category:"sealed",      price:82,  packs:4,  oldPacks:12, rounds:3, structure:"3 rondes BO3 · 4 HC + 4 AotV + 4 WU + 4 WS · 3 encres", base:0, perRound:0, perWin:2000, perLoss:500, perfectBonus:3000, duration:240 },
-  chaos:         { name:"Chaos Sealed (8 packs)",        category:"sealed",      price:50,  packs:0,  oldPacks:8,  rounds:3, structure:"3 rondes BO3 · sets variés",       base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:225 },
-  box:           { name:"Full Box Sealed (24 packs)",    category:"sealed",      price:114, packs:24, oldPacks:0,  rounds:3, structure:"3 rondes BO3 · deck 60, 2 encres", base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:240 },
-  sprintSealed:  { name:"Ink Sprint Sealed (6 packs)",   category:"sprint",      price:34,  packs:6,  oldPacks:0,  rounds:2, structure:"2 rondes BO1",                     base:1000, perRound:0,    perWin:1000, perLoss:0,    perfectBonus:0,    duration:120 },
+  sealed:        { limited:true, name:"Sealed Deck (6 packs)",         category:"sealed",      price:42,  packs:6,  oldPacks:0,  rounds:3, structure:"3 rondes BO3 · deck 40",           base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:210 },
+  sealedDouble:  { limited:true, name:"Sealed Deck Double-Up (6 packs)",category:"sealed",     price:60,  packs:6,  oldPacks:0,  rounds:3, structure:"3 rondes BO3 · deck 40",           base:0,    perRound:0,    perWin:4000, perLoss:1000, perfectBonus:6000, duration:210 },
+  draft:         { limited:true, name:"Booster Draft (4 packs)",       category:"sealed",      price:34,  packs:4,  oldPacks:0,  rounds:3, structure:"3 rondes BO3",                     base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:225 },
+  superSealed:   { limited:true, name:"Super Sealed (16 packs)",       category:"sealed",      price:82,  packs:4,  oldPacks:12, rounds:3, structure:"3 rondes BO3 · 4 HC + 4 AotV + 4 WU + 4 WS · 3 encres", base:0, perRound:0, perWin:2000, perLoss:500, perfectBonus:3000, duration:240 },
+  chaos:         { limited:true, name:"Chaos Sealed (8 packs)",        category:"sealed",      price:50,  packs:0,  oldPacks:8,  rounds:3, structure:"3 rondes BO3 · sets variés",       base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:225 },
+  box:           { limited:true, name:"Full Box Sealed (24 packs)",    category:"sealed",      price:114, packs:24, oldPacks:0,  rounds:3, structure:"3 rondes BO3 · deck 60, 2 encres", base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:240 },
+  sprintSealed:  { limited:true, name:"Ink Sprint Sealed (6 packs)",   category:"sprint",      price:34,  packs:6,  oldPacks:0,  rounds:2, structure:"2 rondes BO1",                     base:1000, perRound:0,    perWin:1000, perLoss:0,    perfectBonus:0,    duration:120 },
   sprintCore:    { name:"Ink Sprint Core Constructed",   category:"sprint",      price:10,  packs:0,  oldPacks:0,  rounds:2, structure:"2 rondes BO1",                     base:1000, perRound:0,    perWin:1000, perLoss:0,    perfectBonus:0,    duration:90 },
-  packrush:      { name:"Ink Sprint Pack Rush (2×2 packs)",category:"sprint",    price:26,  packs:4,  oldPacks:0,  rounds:2, structure:"2 rondes BO1 · 15 lore",           base:1000, perRound:0,    perWin:1000, perLoss:0,    perfectBonus:0,    duration:90 },
-  villainGaston: { name:"Villain Challenge : Gaston",    category:"premium",     price:60,  packs:0,  oldPacks:0,  rounds:6, structure:"6 rondes BO3 · promo saison R2 · promo Gaston 5V+ · playmat 6-0", base:0, perRound:0, perWin:3000, perLoss:1000, perfectBonus:0, duration:390 },
-  villainUrsula: { name:"Villain Challenge : Ursula",    category:"premium",     price:60,  packs:0,  oldPacks:0,  rounds:6, structure:"6 rondes BO3 · promo saison R2 · promo Ursula 5V+ · playmat 6-0", base:0, perRound:0, perWin:3000, perLoss:1000, perfectBonus:0, duration:390 },
-  pinMim:        { name:"Pin Pursuit : Madam Mim",       category:"premium",     price:60,  packs:0,  oldPacks:0,  rounds:4, structure:"4 rondes BO3 · promo saison R2 · promo Mim 4-0", base:0, perRound:0, perWin:3000, perLoss:1500, perfectBonus:0, duration:260 },
-  teamBox:       { name:"Team Trios Full Box / joueur",  category:"team",        price:50,  packs:0,  oldPacks:8,  rounds:3, structure:"3 rondes BO3 équipe · £150 l'équipe · 24 AotV", base:0, perRound:0, perWin:2000, perLoss:500, perfectBonus:3000, duration:270, team:true },
+  packrush:      { limited:true, name:"Ink Sprint Pack Rush (2×2 packs)",category:"sprint",    price:26,  packs:4,  oldPacks:0,  rounds:2, structure:"2 rondes BO1 · 15 lore",           base:1000, perRound:0,    perWin:1000, perLoss:0,    perfectBonus:0,    duration:90 },
+  villainGaston: { promos:[{key:"season",min:0},{key:"villain",min:5},{key:"playmat",min:6}], name:"Villain Challenge : Gaston",    category:"premium",     price:60,  packs:0,  oldPacks:0,  rounds:6, structure:"6 rondes BO3 · promo saison R2 · promo Gaston 5V+ · playmat 6-0", base:0, perRound:0, perWin:3000, perLoss:1000, perfectBonus:0, duration:390 },
+  villainUrsula: { promos:[{key:"season",min:0},{key:"villain",min:5},{key:"playmat",min:6}], name:"Villain Challenge : Ursula",    category:"premium",     price:60,  packs:0,  oldPacks:0,  rounds:6, structure:"6 rondes BO3 · promo saison R2 · promo Ursula 5V+ · playmat 6-0", base:0, perRound:0, perWin:3000, perLoss:1000, perfectBonus:0, duration:390 },
+  pinMim:        { promos:[{key:"season",min:0},{key:"villain",min:4}], name:"Pin Pursuit : Madam Mim",       category:"premium",     price:60,  packs:0,  oldPacks:0,  rounds:4, structure:"4 rondes BO3 · promo saison R2 · promo Mim 4-0", base:0, perRound:0, perWin:3000, perLoss:1500, perfectBonus:0, duration:260 },
+  teamBox:       { limited:true, name:"Team Trios Full Box / joueur",  category:"team",        price:50,  packs:0,  oldPacks:8,  rounds:3, structure:"3 rondes BO3 équipe · £150 l'équipe · 24 AotV", base:0, perRound:0, perWin:2000, perLoss:500, perfectBonus:3000, duration:270, team:true },
   team2v2:       { name:"2v2 Team Play / joueur",        category:"team",        price:18,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO1 · £36 l'équipe",      base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:150, team:true },
   teamInk:       { name:"Team Trios All-Ink Core / joueur",category:"team",      price:18,  packs:0,  oldPacks:0,  rounds:3, structure:"3 rondes BO3 · £54 l'équipe",      base:0,    perRound:0,    perWin:2000, perLoss:500,  perfectBonus:3000, duration:210, team:true }
 };
@@ -769,23 +805,60 @@ const PRIZES = [
 
 /* =========================================================
    FORMULES TICKETS
+   MODEL est mis à jour à chaque calcul depuis les champs de l'onglet Optimiseur.
 ========================================================= */
+const MODEL = { perfectMode: "bonus", swissStep: 0.05, pCons: 0.6, pLim: 0.55 };
+const PROMO_VALUE = { season: 3, villain: 10, playmat: 35 };
+
+/** Bonus « 3 wins » selon la lecture choisie. */
+function perfectBonusOf(f) {
+  const b = f.perfectBonus || 0;
+  if (!b) return 0;
+  return MODEL.perfectMode === "bonus" ? b : Math.max(0, b - (f.perWin || 0));
+}
+
 function ticketsAtWins(f, wins) {
   const w = Math.max(0, Math.min(wins, f.rounds));
   return f.base
        + f.rounds * (f.perRound || 0)
        + w * (f.perWin || 0)
        + (f.rounds - w) * (f.perLoss || 0)
-       + (w === f.rounds ? (f.perfectBonus || 0) : 0);
+       + (w === f.rounds ? perfectBonusOf(f) : 0);
 }
 
-/** Espérance de tickets pour un winrate p (rondes indépendantes). */
+const winrateFor = (f) => (f.limited ? MODEL.pLim : MODEL.pCons);
+
+/**
+ * Distribution du nombre de victoires.
+ * Appariement suisse : à chaque ronde, la proba de gagner baisse de swissStep
+ * par victoire d'avance sur le nombre de défaites (et remonte dans l'autre sens).
+ */
+function winDistribution(f, p) {
+  let dist = [1];
+  for (let r = 0; r < f.rounds; r++) {
+    const next = new Array(r + 2).fill(0);
+    for (let w = 0; w <= r; w++) {
+      if (!dist[w]) continue;
+      const l  = r - w;
+      const pr = Math.min(0.98, Math.max(0.02, p - MODEL.swissStep * (w - l)));
+      next[w + 1] += dist[w] * pr;
+      next[w]     += dist[w] * (1 - pr);
+    }
+    dist = next;
+  }
+  return dist;
+}
+
 function expectedTickets(f, p) {
-  return f.base
-       + f.rounds * (f.perRound || 0)
-       + f.rounds * p * (f.perWin || 0)
-       + f.rounds * (1 - p) * (f.perLoss || 0)
-       + (f.perfectBonus || 0) * Math.pow(p, f.rounds);
+  return winDistribution(f, p).reduce((s, q, w) => s + q * ticketsAtWins(f, w), 0);
+}
+
+/** Valeur espérée des promos / playmats (proba d'atteindre le seuil de victoires). */
+function promoValueOf(f, p) {
+  if (!f.promos) return 0;
+  const d = winDistribution(f, p);
+  return f.promos.reduce((s, pr) =>
+    s + (PROMO_VALUE[pr.key] || 0) * d.slice(pr.min).reduce((a, x) => a + x, 0), 0);
 }
 
 const productValueOf = (f, newPack, oldPack) => f.packs * newPack + f.oldPacks * oldPack;
@@ -881,49 +954,45 @@ function optimizeSchedule(candidates, budgetEuros, bufferMin) {
   return chosen.sort((a, b2) => a.startMin - b2.startMin);
 }
 
-function calculateOptimizer() {
-  const budget     = num("optBudget");
-  const p          = Math.min(1, Math.max(0, num("optWinrate") / 100));
-  const newPack    = num("optNewPack");
-  const oldPack    = num("optOldPack");
-  const ticketEuro = num("optTicketValue") / 1000; // £ par ticket
-  const badge      = num("optBadge");
-  const objective  = $("optObjective").value;
-  const buffer     = Math.max(0, num("optBuffer"));
-  const teamAllowed    = $("optTeam").value === "yes";
-  const friMode   = $("optFriday").value;
-  const satMode   = $("optSaturday").value;
-  const sunMode   = $("optSunday").value;
-  const saturdayBlocked = satMode === "me2" || satMode === "me1d2";
-  const sundayBlocked   = sunMode === "main";
-  const fridayFrom   = friMode === "me1" ? timeToMinutes($("optFriFrom").value || "21:00") : 0;
-  const saturdayFrom = satMode === "ccq" ? timeToMinutes($("optSatFrom").value || "14:00") : 0;
-  renderSituationNote(friMode, satMode, sunMode);
+function readModel() {
+  MODEL.pCons       = Math.min(1, Math.max(0, num("optWinrate") / 100));
+  MODEL.pLim        = Math.min(1, Math.max(0, num("optWinrateLim") / 100));
+  MODEL.swissStep   = Math.max(0, parseFloat($("optSwiss").value) || 0);
+  MODEL.perfectMode = $("optPerfectMode").value;
+  PROMO_VALUE.season  = num("optPromoSeason");
+  PROMO_VALUE.villain = num("optPromoVillain");
+  PROMO_VALUE.playmat = num("optPlaymat");
+}
+
+/** Construit le meilleur parcours pour une situation donnée. */
+function buildPlan(s) {
+  const saturdayBlocked = s.sat === "me2" || s.sat === "me1d2";
+  const sundayBlocked   = s.sun === "main";
+  const fridayFrom   = s.fri === "me1" ? timeToMinutes(s.friFrom || "21:00") : 0;
+  const saturdayFrom = s.sat === "ccq" ? timeToMinutes(s.satFrom || "14:00") : 0;
 
   const candidates = [];
-  let skipped = 0;
-
   for (const e of EVENTS) {
-    if (saturdayBlocked && e.day === "Samedi") { skipped++; continue; }
-    if (sundayBlocked   && e.day === "Dimanche") { skipped++; continue; }
-
+    if (saturdayBlocked && e.day === "Samedi") continue;
+    if (sundayBlocked   && e.day === "Dimanche") continue;
     const f = FORMATS[e.format];
-    if (f.team && !teamAllowed) { skipped++; continue; }
-    if (e.day === "Vendredi" && timeToMinutes(e.start) < fridayFrom) { skipped++; continue; }
-    if (e.day === "Samedi"   && timeToMinutes(e.start) < saturdayFrom) { skipped++; continue; }
+    if (f.team && !s.teamAllowed) continue;
+    if (e.day === "Vendredi" && timeToMinutes(e.start) < fridayFrom) continue;
+    if (e.day === "Samedi"   && timeToMinutes(e.start) < saturdayFrom) continue;
 
+    const p          = winrateFor(f);
     const expected   = expectedTickets(f, p);
-    const products   = productValueOf(f, newPack, oldPack);
-    const prizeValue = expected * ticketEuro;
+    const promos     = promoValueOf(f, p);
+    const products   = productValueOf(f, s.newPack, s.oldPack) + promos;
+    const prizeValue = expected * s.ticketEuro;
     const gross      = products + prizeValue;
     const net        = gross - f.price;
-    const score      = objective === "gross" ? gross : objective === "net" ? net : expected;
+    const score      = s.objective === "gross" ? gross : s.objective === "net" ? net : expected;
 
-    candidates.push({ ...e, f, expected, products, prizeValue, gross, net, score });
+    candidates.push({ ...e, f, p, expected, promos, products, prizeValue, gross, net, score });
   }
 
-  const chosen = optimizeSchedule(candidates, budget, buffer);
-
+  const chosen = optimizeSchedule(candidates, s.budget, s.buffer);
   const agg = chosen.reduce((a, e) => ({
     cost: a.cost + e.f.price,
     tickets: a.tickets + e.expected,
@@ -932,36 +1001,11 @@ function calculateOptimizer() {
     net: a.net + e.net
   }), { cost: 0, tickets: 0, products: 0, prizeValue: 0, net: 0 });
 
-  $("optResultCost").textContent      = fmtEur0(agg.cost);
-  $("optResultTickets").textContent   = fmtInt(agg.tickets);
-  $("optResultWithBadge").textContent = fmtInt(agg.tickets + badge);
-  $("optResultProducts").textContent  = fmtEur(agg.products);
-  $("optResultPrize").textContent     = fmtEur(agg.prizeValue);
+  return { chosen, agg, eligible: candidates.length };
+}
 
-  const netEl = $("optResultNet");
-  netEl.textContent = fmtEur(agg.net);
-  netEl.className = "value " + (agg.net >= 0 ? "green" : "red");
-
-  $("optStatus").textContent =
-    chosen.length
-      ? `${chosen.length} event${chosen.length > 1 ? "s" : ""} retenu${chosen.length > 1 ? "s" : ""} sur ${candidates.length} éligibles`
-      : "Aucun event ne rentre dans les contraintes actuelles.";
-
-  /* --- planning du parcours --- */
+function renderScheduleHtml(chosen) {
   let html = "";
-
-  if (friMode === "me1") {
-    html += `<p class="note small">Vendredi réservé au Main Event 1 jusqu'à ${esc($("optFriFrom").value || "21:00")} :
-      les sides qui commencent avant sont exclus. En cas de drop, baisse l'heure pour récupérer les sides de fin de journée.</p>`;
-  }
-  if (satMode === "ccq") {
-    html += `<p class="note small">Samedi : CCQ Infinity à 09:00, sides exclus avant ${esc($("optSatFrom").value || "14:00")}.</p>`;
-  }
-  if (!chosen.length) {
-    html += `<p class="note danger small">Aucun parcours possible : augmente le budget, réduis la marge
-      entre events ou débloque une journée.</p>`;
-  }
-
   for (const day of DAYS) {
     const dayEvents = chosen.filter((x) => x.day === day);
     if (!dayEvents.length) continue;
@@ -981,25 +1025,117 @@ function calculateOptimizer() {
             <span class="ev-name">${esc(e.f.name)}</span>
             <span class="ev-price gold">${fmtEur0(e.f.price)}</span>
           </div>
-          <div class="ev-sub">${esc(e.f.structure)} · fin estimée ${minutesToTime(localEnd)}</div>
+          <div class="ev-sub">${esc(e.f.structure)} · fin estimée ${minutesToTime(localEnd)} · winrate ${nfInt.format(e.p * 100)} %</div>
           <div class="ev-chips">
             <span class="chip green">≈ ${fmtInt(e.expected)} tickets</span>
-            ${e.products ? `<span class="chip blue">${fmtEur0(e.products)} de boosters</span>` : ""}
+            ${e.products - e.promos > 0 ? `<span class="chip blue">${fmtEur0(e.products - e.promos)} de boosters</span>` : ""}
+            ${e.promos ? `<span class="chip purple">≈ ${fmtEur(e.promos)} de promos/playmat</span>` : ""}
             <span class="chip ${e.net >= 0 ? "gold" : ""}">net ${fmtEur(e.net)}</span>
           </div>
         </article>`;
     }
   }
+  return html;
+}
 
+function calculateOptimizer() {
+  readModel();
+
+  const s = {
+    budget:     num("optBudget"),
+    newPack:    num("optNewPack"),
+    oldPack:    num("optOldPack"),
+    ticketEuro: num("optTicketValue") / 1000, // £ par ticket
+    objective:  $("optObjective").value,
+    buffer:     Math.max(0, num("optBuffer")),
+    teamAllowed: $("optTeam").value === "yes",
+    fri: $("optFriday").value,
+    sat: $("optSaturday").value,
+    sun: $("optSunday").value,
+    friFrom: $("optFriFrom").value,
+    satFrom: $("optSatFrom").value
+  };
+  const badge = num("optBadge");
+  renderSituationNote(s.fri, s.sat, s.sun);
+
+  const plan = buildPlan(s);
+  const { chosen, agg } = plan;
+
+  $("optResultCost").textContent      = fmtEur0(agg.cost);
+  $("optResultTickets").textContent   = fmtInt(agg.tickets);
+  $("optResultWithBadge").textContent = fmtInt(agg.tickets + badge);
+  $("optResultProducts").textContent  = fmtEur(agg.products);
+  $("optResultPrize").textContent     = fmtEur(agg.prizeValue);
+
+  const netEl = $("optResultNet");
+  netEl.textContent = fmtEur(agg.net);
+  netEl.className = "value " + (agg.net >= 0 ? "green" : "red");
+
+  $("optStatus").textContent =
+    chosen.length
+      ? `${chosen.length} event${chosen.length > 1 ? "s" : ""} retenu${chosen.length > 1 ? "s" : ""} sur ${plan.eligible} éligibles`
+      : "Aucun event ne rentre dans les contraintes actuelles.";
+
+  let html = "";
+  if (s.fri === "me1") {
+    html += `<p class="note small">Vendredi réservé au Main Event 1 jusqu'à ${esc(s.friFrom || "21:00")} :
+      les sides qui commencent avant sont exclus. En cas de drop, baisse l'heure pour récupérer les sides de fin de journée.</p>`;
+  }
+  if (s.sat === "ccq") {
+    html += `<p class="note small">Samedi : CCQ Infinity à 09:00, sides exclus avant ${esc(s.satFrom || "14:00")}.</p>`;
+  }
+  if (!chosen.length) {
+    html += `<p class="note danger small">Aucun parcours possible : augmente le budget, réduis la marge
+      entre events ou débloque une journée.</p>`;
+  }
+  html += renderScheduleHtml(chosen);
   $("optSchedule").innerHTML = html;
 
-  renderFormatTable(p, newPack, oldPack, ticketEuro);
+  renderPlanB(s, plan);
+  renderFormatTable(s.newPack, s.oldPack, s.ticketEuro);
   renderEconomy();
 
   if ($("pwSync").checked) {
     $("pwExpected").value = Math.round(agg.tickets);
   }
   updatePrizeWall();
+}
+
+/* =========================================================
+   PLAN B — l'autre issue du Main Event 1
+========================================================= */
+function renderPlanB(s, planA) {
+  const panel = $("planBPanel");
+  if (s.fri !== "me1" || s.sat === "me2") { panel.style.display = "none"; return; }
+  panel.style.display = "";
+
+  const aIsDay2 = s.sat === "me1d2";
+  const sB = { ...s, sat: aIsDay2 ? "free" : "me1d2", sun: aIsDay2 ? s.sun : "free" };
+  const planB = buildPlan(sB);
+
+  const day2   = aIsDay2 ? planA : planB;
+  const noDay2 = aIsDay2 ? planB : planA;
+  const q = Math.min(1, Math.max(0, num("optDay2Prob") / 100));
+  const wTickets = q * day2.agg.tickets + (1 - q) * noDay2.agg.tickets;
+  const wNet     = q * day2.agg.net     + (1 - q) * noDay2.agg.net;
+  const wCost    = q * day2.agg.cost    + (1 - q) * noDay2.agg.cost;
+
+  const label = aIsDay2 ? "Pas de Day 2 (samedi libre)" : "Day 2 passé (samedi bloqué)";
+  const B = planB.agg;
+
+  $("optPlanB").innerHTML = `
+    <p class="note small" style="margin-top:0">Plan affiché au-dessus : <b>${aIsDay2 ? "Day 2 passé" : "pas de Day 2"}</b>.
+      Ci-dessous : <b>${label}</b>, avec le même budget. Le samedi CCQ n'est pas compatible avec un Day 2.</p>
+    <div class="stats">
+      <div class="stat"><div class="label">Dépense plan B</div><div class="value gold">${fmtEur0(B.cost)}</div></div>
+      <div class="stat"><div class="label">Tickets plan B</div><div class="value green">${fmtInt(B.tickets)}</div></div>
+      <div class="stat"><div class="label">Net plan B</div><div class="value ${B.net >= 0 ? "green" : "red"}">${fmtEur(B.net)}</div></div>
+      <div class="stat"><div class="label">Espérance pondérée (${nfInt.format(q * 100)} % Day 2) — dépense</div><div class="value gold">${fmtEur0(wCost)}</div></div>
+      <div class="stat"><div class="label">Espérance pondérée — tickets</div><div class="value green">${fmtInt(wTickets)}</div></div>
+      <div class="stat"><div class="label">Espérance pondérée — net</div><div class="value ${wNet >= 0 ? "green" : "red"}">${fmtEur(wNet)}</div></div>
+    </div>
+    ${planB.chosen.length ? renderScheduleHtml(planB.chosen)
+      : `<p class="note small">Aucun side possible dans ce scénario.</p>`}`;
 }
 
 /* =========================================================
@@ -1031,10 +1167,11 @@ function renderSituationNote(fri, sat, sun) {
 /* =========================================================
    TABLEAU DE COMPARAISON DES FORMATS
 ========================================================= */
-function renderFormatTable(p, newPack, oldPack, ticketEuro) {
+function renderFormatTable(newPack, oldPack, ticketEuro) {
   const rows = Object.values(FORMATS).map((f) => {
+    const p     = winrateFor(f);
     const avg   = expectedTickets(f, p);
-    const packs = productValueOf(f, newPack, oldPack);
+    const packs = productValueOf(f, newPack, oldPack) + promoValueOf(f, p);
     const net   = packs + avg * ticketEuro - f.price;
 
     const detail = f.guaranteed
@@ -1049,7 +1186,7 @@ function renderFormatTable(p, newPack, oldPack, ticketEuro) {
       <td data-label="Tickets selon victoires" style="white-space:normal">${detail}</td>
       <td data-label="Tickets moyens" class="green"><b>${fmtInt(avg)}</b></td>
       <td data-label="Tickets / £">${nf2.format(avg / f.price)}</td>
-      <td data-label="Valeur boosters" class="blue">${fmtEur(packs)}</td>
+      <td data-label="Boosters + lots" class="blue">${fmtEur(packs)}</td>
       <td data-label="Valeur nette" class="${net >= 0 ? "green" : "red"}">${fmtEur(net)}</td>
     </tr>`;
   });
@@ -1200,7 +1337,7 @@ function renderPlanning() {
       if (f.perRound) chips.push(`<span class="chip green">+${fmtInt(f.perRound)} / ronde jouée</span>`);
       if (f.perLoss)  chips.push(`<span class="chip green">+${fmtInt(f.perLoss)} / défaite</span>`);
       if (f.perWin)   chips.push(`<span class="chip blue">+${fmtInt(f.perWin)} / victoire</span>`);
-      if (f.perfectBonus) chips.push(`<span class="chip purple">+${fmtInt(f.perfectBonus)} perfect</span>`);
+      if (perfectBonusOf(f)) chips.push(`<span class="chip purple">+${fmtInt(perfectBonusOf(f))} perfect</span>`);
       chips.push(`<span class="chip gold">${fmtInt(ticketsAtWins(f, f.rounds))} max</span>`);
       if (f.guaranteed) chips.push(`<span class="chip">${fmtInt(ticketsAtWins(f, 0))} garantis</span>`);
 
@@ -1233,7 +1370,7 @@ function renderPlanningSummary() {
       <td data-label="Par ronde jouée">${f.perRound ? "+" + fmtInt(f.perRound) : "—"}</td>
       <td data-label="Par défaite" class="green">${f.perLoss ? "+" + fmtInt(f.perLoss) : "—"}</td>
       <td data-label="Par victoire" class="blue">${f.perWin ? "+" + fmtInt(f.perWin) : "—"}</td>
-      <td data-label="Bonus perfect" class="purple">${f.perfectBonus ? "+" + fmtInt(f.perfectBonus) : "—"}</td>
+      <td data-label="Bonus perfect" class="purple">${perfectBonusOf(f) ? "+" + fmtInt(perfectBonusOf(f)) : "—"}</td>
       <td data-label="Maximum" class="gold"><b>${fmtInt(ticketsAtWins(f, f.rounds))}</b></td>
     </tr>`).join("");
 }
@@ -1257,6 +1394,7 @@ function applyFarmPreset() {
 }
 
 function calculateFarm() {
+  readModel();
   const price       = num("farmPrice");
   const packs       = num("farmPacks");
   const packValue   = num("farmPackValue");
@@ -1366,7 +1504,7 @@ function renderFarmComparison(farm, packValue, winrate) {
       const fmt = FORMATS[k];
       return {
         name: fmt.name, cost: fmt.price, time: fmt.duration,
-        packs: fmt.packs, tickets: expectedTickets(fmt, winrate)
+        packs: fmt.packs, tickets: expectedTickets(fmt, winrateFor(fmt))
       };
     })
   ];
@@ -1411,6 +1549,7 @@ bindLive("#farm input, #farm select", () => {
 });
 
 $("btnOptimize").addEventListener("click", calculateOptimizer);
+$("optPerfectMode").addEventListener("change", () => { renderPlanning(); renderPlanningSummary(); });
 $("btnFarm").addEventListener("click", calculateFarm);
 $("farmPreset").addEventListener("change", applyFarmPreset);
 $("planningFilter").addEventListener("change", renderPlanning);
