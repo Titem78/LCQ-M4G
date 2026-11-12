@@ -265,6 +265,12 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
   .header-inner{padding-left:12px;padding-right:12px}
 }
 
+.ev-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.ev-link{font-size:12.5px;padding:5px 10px;border-radius:8px;border:1px solid var(--border);
+  color:var(--blue);text-decoration:none;background:var(--panel3)}
+.ev-link:hover,.ev-link:focus-visible{border-color:var(--blue)}
+.ev-link.reg{color:var(--bg1);background:var(--gold);border-color:var(--gold);font-weight:700}
+
 @media print{
   header,.tabs,button,.note{display:none!important}
   .tab-content{display:block!important}
@@ -558,6 +564,8 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
   <p class="small" style="margin-top:12px">
     Heures de début, prix et barèmes de tickets : pages événements my.fanfinity.gg (relevé du 12/11).
     Les heures de fin sont des estimations de durée utilisées par l'optimiseur, pas des horaires officiels.
+    <a href="https://my.fanfinity.gg/convention/disney-lorcana-challenge-london-6lmfat/events" target="_blank" rel="noopener">Tous les sides sur Fanfinity</a> ·
+    <a href="https://www.fanfinity.gg/event/disney-lorcana-challenge-26-27-season-of-villainy-london" target="_blank" rel="noopener">Page officielle de l'event</a>
   </p>
 
   <div class="legend">
@@ -758,28 +766,41 @@ const FORMATS = {
    DONNÉES — PLANNING (my.fanfinity.gg, Disney Lorcana Challenge London)
 ========================================================= */
 const EVENTS = [
-  ["Vendredi","11:00","sealedDouble"],["Vendredi","12:00","entry"],["Vendredi","13:00","draft"],
-  ["Vendredi","14:00","core"],["Vendredi","14:30","bare"],["Vendredi","15:00","superSealed"],
-  ["Vendredi","15:30","chaos"],["Vendredi","16:00","sealedDouble"],["Vendredi","16:30","double"],
-  ["Vendredi","17:00","sprintSealed"],["Vendredi","17:30","sprintCore"],["Vendredi","18:00","packrush"],
+  ["Vendredi","11:00","sealedDouble","sealed-deck-double-up-6-packs-gsuext"],["Vendredi","12:00","entry","entry-level-core-constructed-8wr4l4"],["Vendredi","13:00","draft","booster-draft-4-packs-e1pn51"],
+  ["Vendredi","14:00","core","core-constructed-fvylhh"],["Vendredi","14:30","bare","the-bare-necessities-bgea6y"],["Vendredi","15:00","superSealed","super-sealed-16-packs-i80mwt"],
+  ["Vendredi","15:30","chaos","chaos-sealed-8-packs-lqc4ew"],["Vendredi","16:00","sealedDouble"],["Vendredi","16:30","double","core-constructed-double-up-yzgzvt"],
+  ["Vendredi","17:00","sprintSealed","ink-sprint-sealed-deck-6-packs-ob40l4"],["Vendredi","17:30","sprintCore","ink-sprint-core-constructed-0nxy58"],["Vendredi","18:00","packrush","ink-sprint-pack-rush-2x-2-packs-7oljy5"],
 
-  ["Samedi","09:00","villainGaston"],["Samedi","09:30","sealedDouble"],["Samedi","10:00","superSealed"],
-  ["Samedi","11:00","box"],["Samedi","12:00","core"],["Samedi","13:00","entry"],
-  ["Samedi","14:00","sealed"],["Samedi","14:30","bare"],["Samedi","15:00","starter"],
-  ["Samedi","15:30","chaos"],["Samedi","16:00","double"],["Samedi","16:30","infDouble"],
-  ["Samedi","17:00","sprintSealed"],["Samedi","17:30","sprintCore"],["Samedi","18:00","packrush"],
+  ["Samedi","09:00","villainGaston","villain-challenge-gaston-ncj3se"],["Samedi","09:30","sealedDouble"],["Samedi","10:00","superSealed","super-sealed-16-packs-jwjftz"],
+  ["Samedi","11:00","box","full-box-sealed-24-packs-k0xz5k"],["Samedi","12:00","core"],["Samedi","13:00","entry","entry-level-core-constructed-4y8rbw"],
+  ["Samedi","14:00","sealed","sealed-deck-6-packs-xzxjd8"],["Samedi","14:30","bare","the-bare-necessities-3zdlnn"],["Samedi","15:00","starter","starter-deck-q2l5ie"],
+  ["Samedi","15:30","chaos"],["Samedi","16:00","double"],["Samedi","16:30","infDouble","infinity-constructed-double-up-zeac36"],
+  ["Samedi","17:00","sprintSealed"],["Samedi","17:30","sprintCore"],["Samedi","18:00","packrush","ink-sprint-pack-rush-2x-2-packs-ia60np"],
 
-  ["Dimanche","09:00","villainUrsula"],["Dimanche","09:30","teamBox"],["Dimanche","10:00","superSealed"],
-  ["Dimanche","10:30","team2v2"],["Dimanche","11:00","double"],["Dimanche","11:30","teamInk"],
-  ["Dimanche","12:00","infDouble"],["Dimanche","12:30","chaos"],["Dimanche","13:00","entry"],
-  ["Dimanche","13:30","box"],["Dimanche","14:00","pinMim"],["Dimanche","14:30","bare"],
-  ["Dimanche","15:00","double"],["Dimanche","15:30","superSealed"],["Dimanche","16:00","sprintSealed"],
-  ["Dimanche","16:30","sprintCore"],["Dimanche","17:00","packrush"]
-].map(([day, start, format], index) => ({
-  index, day, date: DAY_DATE[day], start, format,
+  ["Dimanche","09:00","villainUrsula","villain-challenge-ursula-6oe3hg"],["Dimanche","09:30","teamBox","team-trios-full-box-sealed-24-packs-dz5sa2"],["Dimanche","10:00","superSealed","super-sealed-16-packs-0ujxyn"],
+  ["Dimanche","10:30","team2v2","2v2-team-play-crtpsw"],["Dimanche","11:00","double"],["Dimanche","11:30","teamInk","team-trios-all-ink-core-constructed-9t3yz8"],
+  ["Dimanche","12:00","infDouble"],["Dimanche","12:30","chaos"],["Dimanche","13:00","entry","entry-level-core-constructed-dyzeat"],
+  ["Dimanche","13:30","box"],["Dimanche","14:00","pinMim","pin-pursuit-madam-mim-z4vd5g"],["Dimanche","14:30","bare","the-bare-necessities-xrlm4p"],
+  ["Dimanche","15:00","double"],["Dimanche","15:30","superSealed","super-sealed-16-packs-pbhb7l"],["Dimanche","16:00","sprintSealed"],
+  ["Dimanche","16:30","sprintCore"],["Dimanche","17:00","packrush","ink-sprint-pack-rush-2x-2-packs-si4ho5"]
+].map(([day, start, format, slug], index) => ({
+  index, day, date: DAY_DATE[day], start, format, slug,
   startMin: DAY_OFFSET[day] + timeToMinutes(start),
   endMin:   DAY_OFFSET[day] + timeToMinutes(start) + FORMATS[format].duration
 }));
+
+/* Liens Fanfinity : la fiche de chaque side (my.fanfinity.gg/event/…) porte la
+   description officielle et le bouton d'inscription. Sans fiche connue → liste des sides. */
+const FANFINITY_HUB  = "https://my.fanfinity.gg/convention/disney-lorcana-challenge-london-6lmfat/events";
+const FANFINITY_INFO = "https://www.fanfinity.gg/event/disney-lorcana-challenge-26-27-season-of-villainy-london";
+function eventLinks(e) {
+  const url = e.slug ? "https://my.fanfinity.gg/event/" + e.slug : FANFINITY_HUB;
+  const lbl = e.slug ? "" : " (liste des sides)";
+  return `<div class="ev-links">
+    <a class="ev-link reg" href="${url}" target="_blank" rel="noopener">📝 S'inscrire${lbl}</a>
+    <a class="ev-link" href="${url}" target="_blank" rel="noopener">📄 Description officielle${lbl}</a>
+  </div>`;
+}
 
 /* =========================================================
    DONNÉES — PRIZE WALL
@@ -1032,6 +1053,7 @@ function renderScheduleHtml(chosen) {
             ${e.promos ? `<span class="chip purple">≈ ${fmtEur(e.promos)} de promos/playmat</span>` : ""}
             <span class="chip ${e.net >= 0 ? "gold" : ""}">net ${fmtEur(e.net)}</span>
           </div>
+          ${eventLinks(e)}
         </article>`;
     }
   }
@@ -1350,6 +1372,7 @@ function renderPlanning() {
           </div>
           <div class="ev-sub">${esc(f.structure)} · fin estimée ${minutesToTime(end)}${packs !== "—" ? " · 📦 " + esc(packs) : ""}</div>
           <div class="ev-chips">${chips.join("")}</div>
+          ${eventLinks(e)}
         </article>`;
     }
   }
