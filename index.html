@@ -510,8 +510,8 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
   </div>
 
   <p class="note small" style="margin-top:14px">
-    Le Prize Wall de Londres n'est pas publié par Fanfinity (« Coming soon »). La liste ci-dessous ne contient
-    que des catégories génériques à prix « à relever » : <b>ajoute les vrais lots et leurs prix en tickets sur place</b>.
+    Prix relevés sur le Prize Wall de Londres le 13/11. Les lots marqués « À confirmer » ou « À relever »
+    n'avaient pas d'étiquette lisible : corrige-les et <b>ajoute les autres lots</b> avec le formulaire.
     Ta liste est enregistrée dans ce navigateur.
   </p>
 
@@ -814,17 +814,19 @@ function eventLinks(e) {
 
 /* =========================================================
    DONNÉES — PRIZE WALL
-   Londres non publié : catégories génériques, à compléter sur place.
-   Le booster est estimé à l'échelle Londres (Paris 40 tickets pour un badge de 160 → ×15).
+   Relevé sur place (photos du 13/11). Booster : estimation à l'échelle Londres.
 ========================================================= */
 const PRIZES_DEFAULT = [
-  { name:"Booster Hyperia City",               cost:600, status:"Estimation" },
-  { name:"Promo non-foil (saison Villainy)",   cost:0,   status:"À relever sur place" },
-  { name:"Playmat",                            cost:0,   status:"À relever sur place" },
-  { name:"Pin",                                cost:0,   status:"À relever sur place" },
-  { name:"Goodies (t-shirt, casquette…)",      cost:0,   status:"À relever sur place" }
+  { name:"Playmat Challenge Ursula (foil)",        cost:15000, status:"Relevé sur place" },
+  { name:"Playmat Challenge Gaston (foil)",       cost:15000, status:"Relevé sur place" },
+  { name:"Pin Ursula",                            cost:4000,  status:"Relevé sur place" },
+  { name:"Pin Gaston",                            cost:4000,  status:"À confirmer (étiquette non visible)" },
+  { name:"Promo Madam Mim",                       cost:4000,  status:"Relevé sur place" },
+  { name:"Promo Gaston",                          cost:3500,  status:"Relevé sur place" },
+  { name:"Illumineer's Trove Hyperia City",       cost:0,     status:"À relever (prix non visible)" },
+  { name:"Booster Hyperia City",                  cost:600,   status:"Estimation" }
 ];
-const PW_KEY = "lcq-m4g-london-prizewall-v1";
+const PW_KEY = "lcq-m4g-london-prizewall-v2";
 let PRIZES = [];
 
 function loadPrizes() {
