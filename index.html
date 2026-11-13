@@ -510,23 +510,33 @@ hr.sep{border:0;border-top:1px solid var(--border);margin:14px 0}
   </div>
 
   <p class="note small" style="margin-top:14px">
-    Le Prize Wall de Londres n'est pas encore publié par Fanfinity (« Coming soon »).
-    Les lots et coûts ci-dessous reprennent la liste Paris convertie à l'échelle Londres (≈ ×15 :
-    badge 160 → 2400 tickets). Tout est modifiable : à corriger sur place.
+    Le Prize Wall de Londres n'est pas publié par Fanfinity (« Coming soon »). La liste ci-dessous ne contient
+    que des catégories génériques à prix « à relever » : <b>ajoute les vrais lots et leurs prix en tickets sur place</b>.
+    Ta liste est enregistrée dans ce navigateur.
   </p>
 
   <div class="table-wrap">
     <table class="stackable">
       <thead><tr>
         <th>Je veux</th><th>Lot</th><th>Prix tickets</th>
-        <th>Quantité</th><th>Total</th><th>Statut</th>
+        <th>Quantité</th><th>Total</th><th>Statut</th><th></th>
       </tr></thead>
       <tbody id="pwTable"></tbody>
     </table>
   </div>
 
+  <h3 class="section-title">Ajouter un lot vu sur le Prize Wall</h3>
+  <div class="grid">
+    <div><label for="pwNewName">Nom du lot</label>
+      <input id="pwNewName" type="text" placeholder="ex. Playmat Ursula"></div>
+    <div><label for="pwNewCost">Prix (tickets)</label>
+      <input id="pwNewCost" type="number" min="0" step="100" inputmode="numeric" placeholder="ex. 12000"></div>
+  </div>
+
   <div class="btn-row">
+    <button class="primary" type="button" id="pwAdd">AJOUTER</button>
     <button class="ghost" type="button" id="pwClear">Tout décocher</button>
+    <button class="ghost" type="button" id="pwReset">Réinitialiser la liste</button>
   </div>
 </div>
 
@@ -804,25 +814,29 @@ function eventLinks(e) {
 
 /* =========================================================
    DONNÉES — PRIZE WALL
-   Londres pas encore publié : liste Paris × 15 (badge 160 → 2400).
+   Londres non publié : catégories génériques, à compléter sur place.
+   Le booster est estimé à l'échelle Londres (Paris 40 tickets pour un badge de 160 → ×15).
 ========================================================= */
-const PW_SCALE = 15;
-const PRIZES = [
-  { name:"Booster Lorcana",                     cost:40,    status:"Estimation (réf. Paris ×15)" },
-  { name:"Stand Out — promo non-foil",          cost:100,   status:"Estimation (réf. Paris ×15)" },
-  { name:"Down in New Orleans — promo non-foil",cost:100,   status:"Estimation (réf. Paris ×15)" },
-  { name:"Headless Horseman — Cursed Rider",    cost:200,   status:"Estimation (réf. Paris ×15)" },
-  { name:"Tinker Bell — Insistent Fairy",       cost:300,   status:"Estimation (réf. Paris ×15)" },
-  { name:"Dragon Fire — promo non-foil",        cost:100,   status:"Estimation (réf. Paris ×15)" },
-  { name:"Let It Go — promo non-foil",          cost:100,   status:"Estimation (réf. Paris ×15)" },
-  { name:"Mulan — Charging Ahead",              cost:300,   status:"Estimation (réf. Paris ×15)" },
-  { name:"Simba — Pride Protector",             cost:500,   status:"Estimation (réf. Paris ×15)" },
-  { name:"Elsa — Ice Maker",                    cost:700,   status:"Estimation (réf. Paris ×15)" },
-  { name:"Pegasus — Gift for Hercules",         cost:100,   status:"Estimation (réf. Paris ×15)" },
-  { name:"Playmat",                             cost:3200,  status:"Estimation (réf. Paris ×15)" },
-  { name:"Uncut Sheet Rare non-foil",           cost:16000, status:"Estimation (réf. Paris ×15)" },
-  { name:"Pin",                                 cost:0,     status:"Prix inconnu" }
-].map((p) => ({ ...p, cost: p.cost * PW_SCALE }));
+const PRIZES_DEFAULT = [
+  { name:"Booster Hyperia City",               cost:600, status:"Estimation" },
+  { name:"Promo non-foil (saison Villainy)",   cost:0,   status:"À relever sur place" },
+  { name:"Playmat",                            cost:0,   status:"À relever sur place" },
+  { name:"Pin",                                cost:0,   status:"À relever sur place" },
+  { name:"Goodies (t-shirt, casquette…)",      cost:0,   status:"À relever sur place" }
+];
+const PW_KEY = "lcq-m4g-london-prizewall-v1";
+let PRIZES = [];
+
+function loadPrizes() {
+  try {
+    const raw = localStorage.getItem(PW_KEY);
+    if (raw) { const v = JSON.parse(raw); if (Array.isArray(v)) { PRIZES = v; return; } }
+  } catch (e) { /* stockage indisponible */ }
+  PRIZES = PRIZES_DEFAULT.map((p) => ({ ...p, qty: 1, checked: false }));
+}
+function savePrizes() {
+  try { localStorage.setItem(PW_KEY, JSON.stringify(PRIZES)); } catch (e) { /* ignore */ }
+}
 
 /* =========================================================
    FORMULES TICKETS
@@ -1249,29 +1263,66 @@ function renderEconomy() {
 /* =========================================================
    PRIZE WALL
 ========================================================= */
-function initPrizeWall() {
+function renderPrizeTable() {
   $("pwTable").innerHTML = PRIZES.map((p, i) => {
-    const badgeClass = p.status.toLowerCase().includes("inconnu") ? "unknown"
-                     : p.status.toLowerCase().includes("officiel") ? "official" : "estimate";
+    const s = (p.status || "").toLowerCase();
+    const badgeClass = s.includes("relever") || s.includes("inconnu") ? "unknown"
+                     : s.includes("sur place") || s.includes("officiel") ? "official" : "estimate";
     return `<tr>
       <td data-label="Je veux" style="text-align:left">
-        <input type="checkbox" data-pw="check" data-i="${i}" aria-label="Sélectionner ${esc(p.name)}">
+        <input type="checkbox" data-pw="check" data-i="${i}" ${p.checked ? "checked" : ""} aria-label="Sélectionner ${esc(p.name)}">
       </td>
       <td data-label="Lot">${esc(p.name)}</td>
       <td data-label="Prix tickets">
-        <input data-pw="cost" data-i="${i}" type="number" min="0" step="50" value="${p.cost}" inputmode="numeric" style="width:110px;display:inline-block">
+        <input data-pw="cost" data-i="${i}" type="number" min="0" step="100" value="${p.cost}" inputmode="numeric" style="width:110px;display:inline-block">
       </td>
       <td data-label="Quantité">
-        <input data-pw="qty" data-i="${i}" type="number" min="1" step="1" value="1" inputmode="numeric" style="width:80px;display:inline-block">
+        <input data-pw="qty" data-i="${i}" type="number" min="1" step="1" value="${p.qty || 1}" inputmode="numeric" style="width:80px;display:inline-block">
       </td>
       <td data-label="Total" class="pw-row-total" data-line="${i}">0</td>
-      <td data-label="Statut"><span class="badge ${badgeClass}">${esc(p.status)}</span></td>
+      <td data-label="Statut"><span class="badge ${badgeClass}">${esc(p.status || "")}</span></td>
+      <td data-label=""><button class="ghost" type="button" data-pw="del" data-i="${i}" aria-label="Supprimer ${esc(p.name)}" style="padding:4px 10px">✕</button></td>
     </tr>`;
   }).join("");
+}
 
-  // délégation d'événements : un seul listener pour toute la table
-  $("pwTable").addEventListener("input", updatePrizeWall);
-  $("pwTable").addEventListener("change", updatePrizeWall);
+function initPrizeWall() {
+  loadPrizes();
+  renderPrizeTable();
+
+  // délégation : un seul listener pour toute la table
+  const onEdit = (ev) => {
+    const t = ev.target, i = Number(t.dataset.i);
+    if (!PRIZES[i]) return;
+    if (t.dataset.pw === "check") PRIZES[i].checked = t.checked;
+    if (t.dataset.pw === "cost") {
+      PRIZES[i].cost = Math.max(0, Number(t.value) || 0);
+      if (PRIZES[i].status !== "Relevé sur place") {
+        PRIZES[i].status = "Relevé sur place";
+        t.closest("tr").querySelector(".badge").className = "badge official";
+        t.closest("tr").querySelector(".badge").textContent = "Relevé sur place";
+      }
+    }
+    if (t.dataset.pw === "qty") PRIZES[i].qty = Math.max(1, Number(t.value) || 1);
+    savePrizes();
+    updatePrizeWall();
+  };
+  $("pwTable").addEventListener("input", onEdit);
+  $("pwTable").addEventListener("change", onEdit);
+  $("pwTable").addEventListener("click", (ev) => {
+    const t = ev.target.closest('[data-pw="del"]');
+    if (!t) return;
+    PRIZES.splice(Number(t.dataset.i), 1);
+    savePrizes(); renderPrizeTable(); updatePrizeWall();
+  });
+}
+
+function addPrize() {
+  const name = $("pwNewName").value.trim();
+  if (!name) { $("pwNewName").focus(); return; }
+  PRIZES.push({ name, cost: Math.max(0, num("pwNewCost")), qty: 1, checked: true, status: "Relevé sur place" });
+  $("pwNewName").value = ""; $("pwNewCost").value = "";
+  savePrizes(); renderPrizeTable(); updatePrizeWall();
 }
 
 function updatePrizeWall() {
@@ -1285,8 +1336,8 @@ function updatePrizeWall() {
 
   checks.forEach((chk) => {
     const i    = Number(chk.dataset.i);
-    const cost = Math.max(0, Number($(`pwTable`).querySelector(`[data-pw="cost"][data-i="${i}"]`).value) || 0);
-    const qty  = Math.max(1, Number($(`pwTable`).querySelector(`[data-pw="qty"][data-i="${i}"]`).value) || 1);
+    const cost = Math.max(0, Number(PRIZES[i].cost) || 0);
+    const qty  = Math.max(1, Number(PRIZES[i].qty) || 1);
     const line = chk.checked ? cost * qty : 0;
 
     $("pwTable").querySelector(`[data-line="${i}"]`).textContent = fmtInt(line) + " tickets";
@@ -1599,8 +1650,15 @@ $("pwOwned").addEventListener("input", () => {
 });
 $("pwSync").addEventListener("change", calculateOptimizer);
 $("pwClear").addEventListener("click", () => {
-  $$('[data-pw="check"]').forEach((c) => { c.checked = false; });
-  updatePrizeWall();
+  PRIZES.forEach((p) => { p.checked = false; });
+  savePrizes(); renderPrizeTable(); updatePrizeWall();
+});
+$("pwAdd").addEventListener("click", addPrize);
+$("pwNewCost").addEventListener("keydown", (e) => { if (e.key === "Enter") addPrize(); });
+$("pwNewName").addEventListener("keydown", (e) => { if (e.key === "Enter") addPrize(); });
+$("pwReset").addEventListener("click", () => {
+  try { localStorage.removeItem(PW_KEY); } catch (e) { /* ignore */ }
+  loadPrizes(); renderPrizeTable(); updatePrizeWall();
 });
 
 ["ecoFarmCost", "ecoFarmTickets", "ecoPrizeTickets"].forEach((id) =>
